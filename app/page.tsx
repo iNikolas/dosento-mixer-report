@@ -1,6 +1,10 @@
 import React from "react";
-import { FileInput } from "@/components";
+import { Dropzone } from "@/components";
 
 export default function Home() {
-  return <FileInput />;
+  return (
+    <main className="flex justify-center items-center min-h-screen">
+      <Dropzone />
+    </main>
+  );
 }

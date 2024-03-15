@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
+import { cn } from "@/utils";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -18,7 +20,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="uk">
-      <body className={inter.className}>{children}</body>
+      <body
+        className={cn(
+          inter.className,
+          "min-h-screen flex flex-col bg-base-300",
+        )}
+      >
+        {children}
+      </body>
     </html>
   );
 }
