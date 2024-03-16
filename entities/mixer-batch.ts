@@ -31,3 +31,5 @@ export interface MixerBatch {
   current: number;
   total: number;
 }
+
+export type MixerBatchTable = Record<string, MixerBatch>;

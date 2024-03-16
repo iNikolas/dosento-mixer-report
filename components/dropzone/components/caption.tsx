@@ -1,8 +1,10 @@
 import React from "react";
+import { useUnit } from "effector-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { supportedFormats } from "@/config";
 import { cn } from "@/utils";
+import { mixerBatchModel } from "@/stores";
 
 const animationProps = {
   initial: { opacity: 0, y: -10 },
@@ -11,15 +13,18 @@ const animationProps = {
 };
 
 export function Caption({ isDraggingOver = false }) {
+  const loading = useUnit(mixerBatchModel.$loading);
+
   return (
-    <div
-      className={cn(
-        "text-center h-full flex flex-col justify-center items-center border-2 border-dashed border-neutral-content p-4 rounded-md transition-all",
-        isDraggingOver && "border-accent",
-        !isDraggingOver && "border-neutral-content",
-      )}
-    >
-      <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait">
+      <div
+        className={cn(
+          "text-center h-full flex flex-col justify-center items-center border-2 border-dashed border-neutral-content p-4 rounded-md transition-all",
+          isDraggingOver && "border-accent",
+          !isDraggingOver && "border-neutral-content",
+          loading && "[&_*]:opacity-0",
+        )}
+      >
         {isDraggingOver ? (
           <motion.p
             key="draggingOverText"
@@ -38,7 +43,7 @@ export function Caption({ isDraggingOver = false }) {
             </p>
           </motion.div>
         )}
-      </AnimatePresence>
-    </div>
+      </div>
+    </AnimatePresence>
   );
 }

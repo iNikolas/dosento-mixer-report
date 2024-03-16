@@ -8,7 +8,7 @@ import {
   options,
   supportedFormats,
 } from "@/config";
-import { MixerBatch } from "@/entities/mixer-batch";
+import { MixerBatchTable } from "@/entities";
 
 function parseFileExtension(name?: string): string | null {
   if (!name) {
@@ -63,8 +63,8 @@ function getNumericValue(input: unknown) {
   return parseFloat(String(input).trim());
 }
 
-function buildMixerBatch(list: unknown[]): MixerBatch[] {
-  return list.reduce<MixerBatch[]>((acc, record) => {
+function buildMixerBatch(list: unknown[]): MixerBatchTable {
+  return list.reduce<MixerBatchTable>((acc, record) => {
     if (
       record instanceof Array &&
       record.length >= minBatchDataLength &&
@@ -78,9 +78,9 @@ function buildMixerBatch(list: unknown[]): MixerBatch[] {
 
       const recipe = dataOffset > 0 ? "" : String(record[3]).trim();
 
-      return [
+      return {
         ...acc,
-        {
+        [String(timestamp)]: {
           timestamp,
           recipe,
           pvc: {
@@ -113,14 +113,14 @@ function buildMixerBatch(list: unknown[]): MixerBatch[] {
           current: getNumericValue(record[17 - dataOffset]),
           total: getNumericValue(record[18 - dataOffset]),
         },
-      ];
+      };
     }
 
     return acc;
-  }, []);
+  }, {});
 }
 
-export function parseFile(file?: File): Promise<MixerBatch[]> {
+export function parseFile(file?: File): Promise<MixerBatchTable> {
   return new Promise((resolve, reject) => {
     if (!file || !isValidFileType(file)) {
       reject(new Error("Тип файлу недійсний"));
@@ -130,7 +130,7 @@ export function parseFile(file?: File): Promise<MixerBatch[]> {
     const handleComplete = (data: unknown[]) => {
       const batchReport = buildMixerBatch(data);
 
-      if (!batchReport.length) {
+      if (!Object.keys(batchReport).length) {
         reject(new Error("У файлі немає дійсних даних"));
         return;
       }

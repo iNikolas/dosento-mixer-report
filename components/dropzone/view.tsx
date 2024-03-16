@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { AnimatedBackground, FileInput } from "./components";
+import { AnimatedBackground, FileInput, Loader } from "./components";
 import { useDragEvents } from "./utils";
 
 export function Dropzone() {
@@ -15,6 +15,7 @@ export function Dropzone() {
     >
       <FileInput />
       <AnimatedBackground isDraggingOver={isDraggingOver} />
+      <Loader />
     </section>
   );
 }

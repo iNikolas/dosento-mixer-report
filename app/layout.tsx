@@ -1,7 +1,10 @@
 import React from "react";
+import { EffectorNext } from "@effector/next";
+import { ToastContainer } from "react-toastify";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import { cn } from "@/utils";
 
@@ -26,7 +29,8 @@ export default function RootLayout({
           "min-h-screen flex flex-col bg-base-300",
         )}
       >
-        {children}
+        <ToastContainer />
+        <EffectorNext>{children}</EffectorNext>
       </body>
     </html>
   );

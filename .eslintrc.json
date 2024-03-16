@@ -1,11 +1,13 @@
 {
+  "plugins": ["effector"],
   "extends": [
     "next/core-web-vitals",
     "airbnb",
     "airbnb-typescript",
     "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:@typescript-eslint/stylistic-type-checked",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:effector/react"
   ],
   "parserOptions": {
     "project": "./tsconfig.json"
@@ -13,6 +15,7 @@
   "rules": {
     "import/prefer-default-export": "off",
     "react/jsx-props-no-spreading": "off",
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "effector/enforce-gate-naming-convention": "error"
   }
 }
