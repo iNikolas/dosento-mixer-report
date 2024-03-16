@@ -7,6 +7,7 @@ import "./globals.css";
 import "react-toastify/dist/ReactToastify.css";
 
 import { cn } from "@/utils";
+import { Navbar } from "@/components";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,7 +31,10 @@ export default function RootLayout({
         )}
       >
         <ToastContainer />
-        <EffectorNext>{children}</EffectorNext>
+        <EffectorNext>
+          <Navbar />
+          {children}
+        </EffectorNext>
       </body>
     </html>
   );
