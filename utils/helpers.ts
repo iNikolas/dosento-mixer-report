@@ -8,7 +8,7 @@ import {
   options,
   supportedFormats,
 } from "@/config";
-import { MixerBatchTable } from "@/entities";
+import { MixerBatch, MixerBatchTable, MixerBatchTotal } from "@/entities";
 
 function parseFileExtension(name?: string): string | null {
   if (!name) {
@@ -60,7 +60,7 @@ function getTimestampFromString(dateString: string) {
 }
 
 function getNumericValue(input: unknown) {
-  return parseFloat(String(input).trim());
+  return Math.round(parseFloat(String(input).trim()) * 100) / 100;
 }
 
 function buildMixerBatch(list: unknown[]): MixerBatchTable {
@@ -110,7 +110,7 @@ function buildMixerBatch(list: unknown[]): MixerBatchTable {
           nbr: {
             set: getNumericValue(record[16 - dataOffset]),
           },
-          current: getNumericValue(record[17 - dataOffset]),
+          current: getNumericValue(record[17 - dataOffset]) + 1,
           total: getNumericValue(record[18 - dataOffset]),
         },
       };
@@ -144,4 +144,96 @@ export function parseFile(file?: File): Promise<MixerBatchTable> {
       error: (error) => reject(error),
     });
   });
+}
+
+export function getReportTotal(store: MixerBatch[]) {
+  return store.reduce<MixerBatchTotal>(
+    (acc, record) => {
+      const pvcActual = acc.pvc.actual + record.pvc.actual;
+      const caco3Actual = acc.caco3.actual + record.caco3.actual;
+      const feeder3Actual = acc.feeder3.actual + record.feeder3.actual;
+      const feeder4Actual = acc.feeder4.actual + record.feeder4.actual;
+      const oilDopActual = acc.oilDop.actual + record.oilDop.actual;
+      const oilDoaActual = acc.oilDoa.actual + record.oilDoa.actual;
+      const nbrSet = acc.nbr.set + record.nbr.set;
+
+      return {
+        pvc: {
+          set: acc.pvc.set + record.pvc.set,
+          actual: pvcActual,
+        },
+        caco3: {
+          set: acc.caco3.set + record.caco3.set,
+          actual: caco3Actual,
+        },
+        feeder3: {
+          set: acc.feeder3.set + record.feeder3.set,
+          actual: feeder3Actual,
+        },
+        feeder4: {
+          set: acc.feeder4.set + record.feeder4.set,
+          actual: feeder4Actual,
+        },
+        oilDop: {
+          set: acc.oilDop.set + record.oilDop.set,
+          actual: oilDopActual,
+        },
+        oilDoa: {
+          set: acc.oilDoa.set + record.oilDoa.set,
+          actual: oilDoaActual,
+        },
+        nbr: {
+          set: nbrSet,
+        },
+        total:
+          acc.total +
+          pvcActual +
+          caco3Actual +
+          feeder3Actual +
+          feeder4Actual +
+          oilDopActual +
+          oilDoaActual +
+          nbrSet,
+      };
+    },
+    {
+      pvc: {
+        set: 0,
+        actual: 0,
+      },
+      caco3: {
+        set: 0,
+        actual: 0,
+      },
+      feeder3: {
+        set: 0,
+        actual: 0,
+      },
+      feeder4: {
+        set: 0,
+        actual: 0,
+      },
+      oilDop: {
+        set: 0,
+        actual: 0,
+      },
+      oilDoa: {
+        set: 0,
+        actual: 0,
+      },
+      nbr: {
+        set: 0,
+      },
+      total: 0,
+    },
+  );
+}
+
+export function formatWeight(weightInKg: number) {
+  if (weightInKg >= 1000) {
+    const weightInTons = (weightInKg / 1000).toFixed(3);
+    return `${weightInTons.replace(".", ",")} т`;
+  }
+  const weightInKilograms = weightInKg.toFixed(2);
+  return `${weightInKilograms.replace(".", ",")} кг`;
 }

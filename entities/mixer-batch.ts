@@ -32,4 +32,9 @@ export interface MixerBatch {
   total: number;
 }
 
+export type MixerBatchTotal = Omit<
+  MixerBatch,
+  "timestamp" | "recipe" | "current"
+>;
+
 export type MixerBatchTable = Record<string, MixerBatch>;

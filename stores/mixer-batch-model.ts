@@ -1,12 +1,21 @@
 import { createStore, createEvent, sample, combine } from "effector";
-import persist from "effector-localstorage";
+import { createGate } from "effector-react";
+import { persist } from "effector-storage/local";
 
-import { MixerBatchTable } from "@/entities";
+import { MixerBatch, MixerBatchTable } from "@/entities";
 import { parseFileFx, showErrorMessageFx } from "@/effects";
+import { getReportTotal } from "@/utils";
+
+export const Gate = createGate();
 
 export const fileChanged = createEvent<File | undefined>();
 
 const $mixerBatch = createStore<MixerBatchTable>({});
+
+export const $report = createStore<MixerBatch[]>([]);
+
+export const $total = $report.map(getReportTotal);
+
 export const $loading = combine([parseFileFx.pending], (loading) =>
   loading.some(Boolean),
 );
@@ -14,6 +23,15 @@ export const $loading = combine([parseFileFx.pending], (loading) =>
 persist({
   store: $mixerBatch,
   key: "mixer-batch",
+  pickup: Gate.open,
+});
+
+sample({
+  clock: $mixerBatch,
+  fn: (record) => {
+    return Object.values(record);
+  },
+  target: $report,
 });
 
 sample({ clock: fileChanged, target: parseFileFx });

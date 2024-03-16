@@ -25,15 +25,14 @@ export default function RootLayout({
   return (
     <html className="overflow-x-hidden" lang="uk">
       <body
-        className={cn(
-          inter.className,
-          "min-h-screen flex flex-col bg-base-300",
-        )}
+        className={cn(inter.className, "h-screen flex flex-col bg-base-300")}
       >
         <ToastContainer />
         <EffectorNext>
           <Navbar />
-          {children}
+          <main className="flex justify-center items-center flex-grow overflow-hidden">
+            {children}
+          </main>
         </EffectorNext>
       </body>
     </html>

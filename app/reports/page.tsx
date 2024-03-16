@@ -1,9 +1,7 @@
 import React from "react";
 
+import { ReportTable } from "@/components";
+
 export default function Home() {
-  return (
-    <main className="flex justify-center items-center min-h-screen">
-      Reports page
-    </main>
-  );
+  return <ReportTable />;
 }
