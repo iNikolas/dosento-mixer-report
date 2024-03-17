@@ -6,9 +6,18 @@ import {
   maxBatchDataLength,
   minBatchDataLength,
   options,
+  sortingColumns,
+  sortingType,
   supportedFormats,
 } from "@/config";
-import { MixerBatch, MixerBatchTable, MixerBatchTotal } from "@/entities";
+import {
+  Filter,
+  MixerBatch,
+  MixerBatchTable,
+  MixerBatchTotal,
+} from "@/entities";
+
+export type ValueOf<T> = T[keyof T];
 
 function parseFileExtension(name?: string): string | null {
   if (!name) {
@@ -236,4 +245,28 @@ export function formatWeight(weightInKg: number) {
   }
   const weightInKilograms = weightInKg.toFixed(2);
   return `${weightInKilograms.replace(".", ",")} кг`;
+}
+
+export function getFilteredReport({
+  mixerBatch,
+  filter,
+}: {
+  mixerBatch: MixerBatchTable;
+  filter: Filter;
+}) {
+  const report = Object.values(mixerBatch);
+
+  if (filter.column === sortingColumns.recipe) {
+    report.sort(({ recipe: a }, { recipe: b }) =>
+      filter.type === sortingType.asc ? a.localeCompare(b) : b.localeCompare(a),
+    );
+  }
+
+  if (filter.column === sortingColumns.timestamp) {
+    report.sort(({ timestamp: a }, { timestamp: b }) =>
+      filter.type === sortingType.asc ? a - b : b - a,
+    );
+  }
+
+  return report;
 }

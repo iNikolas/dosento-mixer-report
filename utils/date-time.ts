@@ -1,47 +1,37 @@
+import { zonedTimeToUtc, format } from "date-fns-tz";
+import { uk } from "date-fns/locale";
+
 export function formatTime(input: Date | number | string) {
-  const date = new Date(input);
+  const utcDate = zonedTimeToUtc(input, "utc");
 
-  const hours = date.getHours().toString().padStart(2, "0");
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  return `${hours}:${minutes}`;
-}
-
-function getMonthName(monthIndex: number) {
-  const monthNames = [
-    "січ.",
-    "лют.",
-    "бер.",
-    "квіт.",
-    "трав.",
-    "черв.",
-    "лип.",
-    "серп.",
-    "вер.",
-    "жовт.",
-    "лист.",
-    "груд.",
-  ];
-  return monthNames[monthIndex];
+  return format(utcDate, "HH:mm", { timeZone: "Europe/Kiev" });
 }
 
 export function formatDate(input: Date | number | string) {
-  const date = new Date(input);
-  const today = new Date();
+  const utcDate = zonedTimeToUtc(input, "utc");
+  const localDate = zonedTimeToUtc(utcDate, "Europe/Kiev");
 
-  if (date.toDateString() === today.toDateString()) {
+  const oneDayInMs = 86400000;
+  const today = zonedTimeToUtc(new Date(), "Europe/Kiev");
+  const yesterday = zonedTimeToUtc(
+    new Date(Date.now() - oneDayInMs),
+    "Europe/Kiev",
+  );
+
+  if (localDate.toDateString() === today.toDateString()) {
     return "Сьогодні";
   }
 
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
-
-  if (date.toDateString() === yesterday.toDateString()) {
+  if (localDate.toDateString() === yesterday.toDateString()) {
     return "Вчора";
   }
 
-  if (date.getFullYear() === today.getFullYear()) {
-    return `${date.getDate()} ${getMonthName(date.getMonth())}`;
+  if (localDate.getFullYear() !== today.getFullYear()) {
+    return format(localDate, "dd LLL yyyy", {
+      locale: uk,
+      timeZone: "Europe/Kiev",
+    });
   }
 
-  return `${date.getDate()} ${getMonthName(date.getMonth())}, ${date.getFullYear()}`;
+  return format(localDate, "dd LLL", { locale: uk, timeZone: "Europe/Kiev" });
 }

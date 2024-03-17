@@ -1,12 +1,22 @@
+"use client";
+
 import React from "react";
+
+import { sortingColumns } from "@/config";
+
+import { SortingButton } from "./sorting-button";
 
 export function Header() {
   return (
     <thead>
       <tr>
         <th rowSpan={2}>#</th>
-        <td rowSpan={2}>Дата</td>
-        <td rowSpan={2}>Рецепт</td>
+        <td rowSpan={2}>
+          <SortingButton column={sortingColumns.timestamp}>Дата</SortingButton>
+        </td>
+        <td rowSpan={2}>
+          <SortingButton column={sortingColumns.recipe}>Рецепт</SortingButton>
+        </td>
         <td className="text-center" colSpan={2}>
           PVC, кг
         </td>
@@ -32,19 +42,19 @@ export function Header() {
       </tr>
 
       <tr>
-        <td className="text-center">Встановлено</td>
-        <td className="text-center">Фактично</td>
-        <td className="text-center">Встановлено</td>
-        <td className="text-center">Фактично</td>
-        <td className="text-center">Встановлено</td>
-        <td className="text-center">Фактично</td>
-        <td className="text-center">Встановлено</td>
-        <td className="text-center">Фактично</td>
-        <td className="text-center">Встановлено</td>
-        <td className="text-center">Фактично</td>
-        <td className="text-center">Встановлено</td>
-        <td className="text-center">Фактично</td>
-        <td className="text-center">Встановлено</td>
+        <td className="text-center">Ціль</td>
+        <td className="text-center">Факт</td>
+        <td className="text-center">Ціль</td>
+        <td className="text-center">Факт</td>
+        <td className="text-center">Ціль</td>
+        <td className="text-center">Факт</td>
+        <td className="text-center">Ціль</td>
+        <td className="text-center">Факт</td>
+        <td className="text-center">Ціль</td>
+        <td className="text-center">Факт</td>
+        <td className="text-center">Ціль</td>
+        <td className="text-center">Факт</td>
+        <td className="text-center">Ціль</td>
       </tr>
     </thead>
   );

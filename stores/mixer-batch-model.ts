@@ -4,7 +4,9 @@ import { persist } from "effector-storage/local";
 
 import { MixerBatch, MixerBatchTable } from "@/entities";
 import { parseFileFx, showErrorMessageFx } from "@/effects";
-import { getReportTotal } from "@/utils";
+import { getFilteredReport, getReportTotal } from "@/utils";
+
+import { $filter } from "./report-filters-model";
 
 export const Gate = createGate();
 
@@ -27,10 +29,9 @@ persist({
 });
 
 sample({
-  clock: $mixerBatch,
-  fn: (record) => {
-    return Object.values(record);
-  },
+  clock: [$mixerBatch, $filter],
+  source: { mixerBatch: $mixerBatch, filter: $filter },
+  fn: getFilteredReport,
   target: $report,
 });
 
