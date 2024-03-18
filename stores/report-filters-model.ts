@@ -8,6 +8,7 @@ export const filterColumnChanged = createEvent<SortingFilters>();
 export const searchInputChanged = createEvent<string>();
 
 export const $searchInput = createStore("");
+const $searchSanitized = $searchInput.map((search) => search.trim());
 
 export const $filter = createStore<Filter>({
   column: sortingColumns.timestamp,
@@ -15,7 +16,7 @@ export const $filter = createStore<Filter>({
   search: "",
 });
 
-const searchFilterChanged = debounce<string>($searchInput, searchDelayMs);
+const searchFilterChanged = debounce<string>($searchSanitized, searchDelayMs);
 
 sample({ clock: searchInputChanged, target: $searchInput });
 
