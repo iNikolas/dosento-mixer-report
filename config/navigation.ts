@@ -1,4 +1,4 @@
-const links = {
+export const links = {
   uploadData: "/",
   report: "/reports",
 } as const;
