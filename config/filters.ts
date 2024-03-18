@@ -9,3 +9,4 @@ export const sortingType = {
 } as const;
 
 export const searchDelayMs = 350;
+export const filterDateDelayMs = 500;

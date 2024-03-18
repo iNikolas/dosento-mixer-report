@@ -253,6 +253,7 @@ export function getFilteredReport({
   filter: Filter;
 }) {
   const search = filter.search.trim();
+  const { startTimestamp, endTimestamp } = filter;
   const report = Object.values(mixerBatch);
 
   if (filter.column === sortingColumns.recipe) {
@@ -267,10 +268,25 @@ export function getFilteredReport({
     );
   }
 
-  if (search) {
-    return report.filter((batch) =>
-      batch.recipe.toLowerCase().includes(search.toLowerCase()),
-    );
+  if (search || (startTimestamp ?? endTimestamp)) {
+    return report.filter((batch) => {
+      if (
+        search &&
+        !batch.recipe.toLowerCase().includes(search.toLowerCase())
+      ) {
+        return false;
+      }
+
+      if (startTimestamp && batch.timestamp < startTimestamp) {
+        return false;
+      }
+
+      if (endTimestamp && batch.timestamp > endTimestamp) {
+        return false;
+      }
+
+      return true;
+    });
   }
 
   return report;

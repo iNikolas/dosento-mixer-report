@@ -1,11 +1,12 @@
 import React from "react";
 
-import { Search } from "./components";
+import { Datepicker, Search } from "./components";
 
 export function ControlPanel() {
   return (
-    <section className="navbar bg-base-100">
+    <section className="navbar bg-base-100 flex gap-3 overflow-x-auto">
       <Search />
+      <Datepicker />
     </section>
   );
 }

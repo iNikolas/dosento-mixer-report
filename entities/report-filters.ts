@@ -10,4 +10,6 @@ export interface Filter {
   column: SortingFilters;
   type: SortingType;
   search: string;
+  startTimestamp: number | null;
+  endTimestamp: number | null;
 }

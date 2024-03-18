@@ -1,4 +1,4 @@
-import { zonedTimeToUtc, format } from "date-fns-tz";
+import { zonedTimeToUtc, format, utcToZonedTime } from "date-fns-tz";
 import { uk } from "date-fns/locale";
 
 export function formatTime(input: Date | number | string) {
@@ -34,4 +34,21 @@ export function formatDate(input: Date | number | string) {
   }
 
   return format(localDate, "dd LLL", { locale: uk, timeZone: "Europe/Kiev" });
+}
+
+export function getUtcTimestamp(date: Date | null) {
+  if (!date) {
+    return null;
+  }
+
+  const utcDate = utcToZonedTime(date, "utc");
+
+  return utcDate.getTime();
+}
+
+export function serializeDate(date: Date | null) {
+  return date ? date.toISOString() : "null";
+}
+export function deserializeDate(value: string) {
+  return value === "null" ? null : new Date(value);
 }

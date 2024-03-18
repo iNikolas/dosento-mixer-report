@@ -13,11 +13,8 @@ export const Gate = createGate();
 export const fileChanged = createEvent<File | undefined>();
 
 const $mixerBatch = createStore<MixerBatchTable>({});
-
 export const $report = createStore<MixerBatch[]>([]);
-
 export const $total = $report.map(getReportTotal);
-
 export const $loading = combine([parseFileFx.pending], (loading) =>
   loading.some(Boolean),
 );
