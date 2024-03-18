@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 
 import { MixerBatch } from "@/entities";
 import { formatDate, formatTime } from "@/utils";
@@ -11,7 +12,13 @@ export function Row({
   recordNumber: number;
 }) {
   return (
-    <tr>
+    <motion.tr
+      key={data.timestamp}
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -40 }}
+      transition={{ duration: 0.5 }}
+    >
       <th>{recordNumber}</th>
       <td className="text-center">
         {formatDate(data.timestamp)}
@@ -35,6 +42,6 @@ export function Row({
       <td>{data.current}</td>
       <td>{data.total}</td>
       <th>{recordNumber}</th>
-    </tr>
+    </motion.tr>
   );
 }

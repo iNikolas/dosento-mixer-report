@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useUnit } from "effector-react";
+import { AnimatePresence } from "framer-motion";
 
 import { mixerBatchModel } from "@/stores";
 
@@ -13,13 +14,15 @@ export function Body() {
 
   return (
     <tbody>
-      {report.length ? (
-        report.map((batch, index) => (
-          <Row key={batch.timestamp} data={batch} recordNumber={index + 1} />
-        ))
-      ) : (
-        <NoData />
-      )}
+      <AnimatePresence>
+        {report.length ? (
+          report.map((batch, index) => (
+            <Row key={batch.timestamp} data={batch} recordNumber={index + 1} />
+          ))
+        ) : (
+          <NoData />
+        )}
+      </AnimatePresence>
     </tbody>
   );
 }
