@@ -7,3 +7,5 @@ export const sortingType = {
   asc: "ASCENDING",
   desc: "DESCENDING",
 } as const;
+
+export const searchDelayMs = 350;

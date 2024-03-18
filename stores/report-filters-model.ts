@@ -1,13 +1,18 @@
 import { createEvent, createStore, sample } from "effector";
+import { debounce } from "patronum";
 
 import { Filter, SortingFilters } from "@/entities";
-import { sortingColumns, sortingType } from "@/config";
+import { searchDelayMs, sortingColumns, sortingType } from "@/config";
 
 export const filterColumnChanged = createEvent<SortingFilters>();
+export const searchParamChanged = createEvent<string>();
+
+const searchParamChangedDebounced = debounce(searchParamChanged, searchDelayMs);
 
 export const $filter = createStore<Filter>({
   column: sortingColumns.timestamp,
   type: sortingType.asc,
+  search: "",
 });
 
 sample({
@@ -26,6 +31,18 @@ sample({
       column: newColumn,
       type: sortingType.asc,
       ...restParams,
+    };
+  },
+  target: $filter,
+});
+
+sample({
+  clock: searchParamChangedDebounced,
+  source: $filter,
+  fn: (filter, search) => {
+    return {
+      ...filter,
+      search,
     };
   },
   target: $filter,

@@ -1,7 +1,12 @@
 import React from "react";
 
-import { ReportTable } from "@/components";
+import { ControlPanel, ReportTable } from "@/components";
 
 export default function Home() {
-  return <ReportTable />;
+  return (
+    <>
+      <ControlPanel />
+      <ReportTable />
+    </>
+  );
 }

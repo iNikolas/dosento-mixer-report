@@ -17,8 +17,6 @@ import {
   MixerBatchTotal,
 } from "@/entities";
 
-export type ValueOf<T> = T[keyof T];
-
 function parseFileExtension(name?: string): string | null {
   if (!name) {
     return null;
@@ -254,6 +252,7 @@ export function getFilteredReport({
   mixerBatch: MixerBatchTable;
   filter: Filter;
 }) {
+  const search = filter.search.trim();
   const report = Object.values(mixerBatch);
 
   if (filter.column === sortingColumns.recipe) {
@@ -265,6 +264,12 @@ export function getFilteredReport({
   if (filter.column === sortingColumns.timestamp) {
     report.sort(({ timestamp: a }, { timestamp: b }) =>
       filter.type === sortingType.asc ? a - b : b - a,
+    );
+  }
+
+  if (search) {
+    return report.filter((batch) =>
+      batch.recipe.toLowerCase().includes(search.toLowerCase()),
     );
   }
 

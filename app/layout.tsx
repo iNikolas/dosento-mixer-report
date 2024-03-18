@@ -30,7 +30,7 @@ export default function RootLayout({
         <ToastContainer />
         <EffectorNext>
           <Navbar />
-          <main className="flex justify-center items-center flex-grow overflow-hidden">
+          <main className="flex flex-col flex-grow overflow-hidden">
             {children}
           </main>
         </EffectorNext>
