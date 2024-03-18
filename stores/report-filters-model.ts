@@ -5,15 +5,19 @@ import { Filter, SortingFilters } from "@/entities";
 import { searchDelayMs, sortingColumns, sortingType } from "@/config";
 
 export const filterColumnChanged = createEvent<SortingFilters>();
-export const searchParamChanged = createEvent<string>();
+export const searchInputChanged = createEvent<string>();
 
-const searchParamChangedDebounced = debounce(searchParamChanged, searchDelayMs);
+export const $searchInput = createStore("");
 
 export const $filter = createStore<Filter>({
   column: sortingColumns.timestamp,
   type: sortingType.asc,
   search: "",
 });
+
+const searchFilterChanged = debounce<string>($searchInput, searchDelayMs);
+
+sample({ clock: searchInputChanged, target: $searchInput });
 
 sample({
   clock: filterColumnChanged,
@@ -37,8 +41,9 @@ sample({
 });
 
 sample({
-  clock: searchParamChangedDebounced,
+  clock: searchFilterChanged,
   source: $filter,
+  filter: (filter, search) => filter.search !== search,
   fn: (filter, search) => {
     return {
       ...filter,
