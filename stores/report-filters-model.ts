@@ -68,7 +68,8 @@ sample({
 sample({
   clock: startTimestampChanged,
   source: $filter,
-  filter: (filter, startTimestamp) => startTimestamp !== filter.startTimestamp,
+  filter: (filter, startTimestamp) =>
+    Boolean(filter.startTimestamp) && startTimestamp !== filter.startTimestamp,
   fn: (filter, startTimestamp) => ({ ...filter, startTimestamp }),
   target: $filter,
 });
@@ -76,7 +77,26 @@ sample({
 sample({
   clock: endTimestampChanged,
   source: $filter,
-  filter: (filter, endTimestamp) => endTimestamp !== filter.endTimestamp,
+  filter: (filter, endTimestamp) =>
+    Boolean(filter.endTimestamp) && endTimestamp !== filter.endTimestamp,
+  fn: (filter, endTimestamp) => ({ ...filter, endTimestamp }),
+  target: $filter,
+});
+
+sample({
+  clock: $startTimestamp,
+  source: $filter,
+  filter: (filter, startTimestamp) =>
+    !filter.startTimestamp && startTimestamp !== filter.startTimestamp,
+  fn: (filter, startTimestamp) => ({ ...filter, startTimestamp }),
+  target: $filter,
+});
+
+sample({
+  clock: endTimestampChanged,
+  source: $filter,
+  filter: (filter, endTimestamp) =>
+    !filter.endTimestamp && endTimestamp !== filter.endTimestamp,
   fn: (filter, endTimestamp) => ({ ...filter, endTimestamp }),
   target: $filter,
 });
