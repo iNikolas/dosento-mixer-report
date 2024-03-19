@@ -2,5 +2,25 @@ import React from "react";
 import { Dropzone } from "@/components";
 
 export default function Home() {
-  return <Dropzone className="self-center my-auto" />;
+  return (
+    <div className="flex flex-wrap items-center justify-center self-center my-auto w-full overflow-y-auto">
+      <div className="prose flex-1 flex flex-col justify-center p-10 md:p-20">
+        <h1>
+          Легко керуйте звітами змішувальної установки: трансформуйте, сортуйте
+          та аналізуйте з легкістю
+        </h1>
+        <p>
+          Оптимізуйте свій робочий процес за допомогою інтуїтивно зрозумілого
+          інструменту, розробленого для легкого читання та організації звітів у
+          форматі CSV. Платформа забезпечує безперебійне представлення даних за
+          допомогою таблиць, надаючи можливості сортування, пошуку та додаткове
+          фільтрування дат. Отримайте глибше уявлення про свої дані за допомогою
+          вичерпних підсумків у кожному стовпці та зручної функції загального
+          підсумку. Спростіть процес звітування та розкрийте весь потенціал
+          своїх даних!
+        </p>
+      </div>
+      <Dropzone />
+    </div>
+  );
 }
