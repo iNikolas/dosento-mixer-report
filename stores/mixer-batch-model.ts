@@ -23,7 +23,7 @@ export const $needRedirect = createStore(false);
 persist({
   store: $mixerBatch,
   key: "mixer-batch",
-  pickup: Gate.close,
+  pickup: Gate.open,
 });
 
 sample({ clock: Gate.open, fn: () => false, target: $needRedirect });
