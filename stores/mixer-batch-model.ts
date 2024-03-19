@@ -18,12 +18,17 @@ export const $total = $report.map(getReportTotal);
 export const $loading = combine([parseFileFx.pending], (loading) =>
   loading.some(Boolean),
 );
+export const $needRedirect = createStore(false);
 
 persist({
   store: $mixerBatch,
   key: "mixer-batch",
-  pickup: Gate.open,
+  pickup: Gate.close,
 });
+
+sample({ clock: Gate.open, fn: () => false, target: $needRedirect });
+
+sample({ clock: parseFileFx.done, fn: () => true, target: $needRedirect });
 
 sample({
   clock: [$mixerBatch, $filter],

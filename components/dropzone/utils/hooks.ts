@@ -1,4 +1,9 @@
 import React from "react";
+import { useUnit } from "effector-react";
+import { useRouter } from "next/navigation";
+
+import { mixerBatchModel } from "@/stores";
+import { links } from "@/config";
 
 export function useDragEvents() {
   const [isDraggingOver, setIsDraggingOver] = React.useState(false);
@@ -19,4 +24,18 @@ export function useDragEvents() {
       onDragLeave: handleDragLeave,
     },
   };
+}
+
+export function useReportRedirect() {
+  const router = useRouter();
+
+  const needRedirect = useUnit(mixerBatchModel.$needRedirect);
+
+  React.useEffect(() => {
+    if (needRedirect) {
+      router.push(links.report);
+    }
+  }, [needRedirect, router]);
+
+  return needRedirect;
 }
