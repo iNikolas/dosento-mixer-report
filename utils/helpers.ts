@@ -291,3 +291,16 @@ export function getFilteredReport({
 
   return report;
 }
+
+export function getLatestBatchRecord(mixerbatch: MixerBatchTable) {
+  return Object.values(mixerbatch).reduce<number | null>(
+    (max, { timestamp }) => {
+      if (!max) {
+        return timestamp;
+      }
+
+      return timestamp > max ? timestamp : max;
+    },
+    null,
+  );
+}

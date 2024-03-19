@@ -1,5 +1,7 @@
 import React from "react";
 
+import { ReadDatabaseButton } from "../read-database-button";
+
 export function About() {
   return (
     <div className="prose flex-1 flex flex-col justify-center p-10 md:p-20">
@@ -17,6 +19,10 @@ export function About() {
         підсумку. Спростіть процес звітування та розкрийте весь потенціал своїх
         даних!
       </p>
+
+      <h3>Немає потрібного файлу CSV?</h3>
+
+      <ReadDatabaseButton />
     </div>
   );
 }
