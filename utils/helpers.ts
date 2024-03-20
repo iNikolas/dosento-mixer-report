@@ -206,22 +206,22 @@ export function getReportTotal(store: MixerBatch[]) {
         },
         total:
           acc.total +
-          pvcActual +
-          caco3Actual +
-          feeder3Actual +
-          feeder4Actual +
-          oilDopActual +
-          oilDoaActual +
-          nbrSet,
+          record.pvc.actual +
+          record.caco3.actual +
+          record.feeder3.actual +
+          record.feeder4.actual +
+          record.oilDop.actual +
+          record.oilDoa.actual +
+          record.nbr.set,
         targetTotal:
           acc.targetTotal +
-          pvcSet +
-          caco3Set +
-          feeder3Set +
-          feeder4Set +
-          oilDopSet +
-          oilDoaSet +
-          nbrSet,
+          record.pvc.set +
+          record.caco3.set +
+          record.feeder3.set +
+          record.feeder4.set +
+          record.oilDop.set +
+          record.oilDoa.set +
+          record.nbr.set,
       };
     },
     {
