@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 
 import { MixerBatch } from "@/entities";
-import { formatDate, formatTime } from "@/utils";
+import { formatDate, formatNumericRow, formatTime } from "@/utils";
 
 export function Row({
   data,
@@ -26,19 +26,19 @@ export function Row({
         {formatTime(data.timestamp)}
       </td>
       <td className="font-bold">{data.recipe}</td>
-      <td>{data.pvc.set}</td>
-      <td>{data.pvc.actual}</td>
-      <td>{data.caco3.set}</td>
-      <td>{data.caco3.actual}</td>
-      <td>{data.feeder3.set}</td>
-      <td>{data.feeder3.actual}</td>
-      <td>{data.feeder4.set}</td>
-      <td>{data.feeder4.actual}</td>
-      <td>{data.oilDop.set}</td>
-      <td>{data.oilDop.actual}</td>
-      <td>{data.oilDoa.set}</td>
-      <td>{data.oilDoa.actual}</td>
-      <td>{data.nbr.set}</td>
+      <td>{formatNumericRow(data.pvc.set)}</td>
+      <td>{formatNumericRow(data.pvc.actual)}</td>
+      <td>{formatNumericRow(data.caco3.set)}</td>
+      <td>{formatNumericRow(data.caco3.actual)}</td>
+      <td>{formatNumericRow(data.feeder3.set)}</td>
+      <td>{formatNumericRow(data.feeder3.actual)}</td>
+      <td>{formatNumericRow(data.feeder4.set)}</td>
+      <td>{formatNumericRow(data.feeder4.actual)}</td>
+      <td>{formatNumericRow(data.oilDop.set)}</td>
+      <td>{formatNumericRow(data.oilDop.actual)}</td>
+      <td>{formatNumericRow(data.oilDoa.set)}</td>
+      <td>{formatNumericRow(data.oilDoa.actual)}</td>
+      <td>{formatNumericRow(data.nbr.set)}</td>
       <td>{data.current}</td>
       <td>{data.total}</td>
       <th>{recordNumber}</th>

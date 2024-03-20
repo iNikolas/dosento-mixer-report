@@ -157,36 +157,48 @@ export function getReportTotal(store: MixerBatch[]) {
   return store.reduce<MixerBatchTotal>(
     (acc, record) => {
       const pvcActual = acc.pvc.actual + record.pvc.actual;
+      const pvcSet = acc.pvc.set + record.pvc.set;
+
       const caco3Actual = acc.caco3.actual + record.caco3.actual;
+      const caco3Set = acc.caco3.set + record.caco3.set;
+
       const feeder3Actual = acc.feeder3.actual + record.feeder3.actual;
+      const feeder3Set = acc.feeder3.set + record.feeder3.set;
+
       const feeder4Actual = acc.feeder4.actual + record.feeder4.actual;
+      const feeder4Set = acc.feeder4.set + record.feeder4.set;
+
       const oilDopActual = acc.oilDop.actual + record.oilDop.actual;
+      const oilDopSet = acc.oilDop.set + record.oilDop.set;
+
       const oilDoaActual = acc.oilDoa.actual + record.oilDoa.actual;
+      const oilDoaSet = acc.oilDoa.set + record.oilDoa.set;
+
       const nbrSet = acc.nbr.set + record.nbr.set;
 
       return {
         pvc: {
-          set: acc.pvc.set + record.pvc.set,
+          set: pvcSet,
           actual: pvcActual,
         },
         caco3: {
-          set: acc.caco3.set + record.caco3.set,
+          set: caco3Set,
           actual: caco3Actual,
         },
         feeder3: {
-          set: acc.feeder3.set + record.feeder3.set,
+          set: feeder3Set,
           actual: feeder3Actual,
         },
         feeder4: {
-          set: acc.feeder4.set + record.feeder4.set,
+          set: feeder4Set,
           actual: feeder4Actual,
         },
         oilDop: {
-          set: acc.oilDop.set + record.oilDop.set,
+          set: oilDopSet,
           actual: oilDopActual,
         },
         oilDoa: {
-          set: acc.oilDoa.set + record.oilDoa.set,
+          set: oilDoaSet,
           actual: oilDoaActual,
         },
         nbr: {
@@ -200,6 +212,15 @@ export function getReportTotal(store: MixerBatch[]) {
           feeder4Actual +
           oilDopActual +
           oilDoaActual +
+          nbrSet,
+        targetTotal:
+          acc.targetTotal +
+          pvcSet +
+          caco3Set +
+          feeder3Set +
+          feeder4Set +
+          oilDopSet +
+          oilDoaSet +
           nbrSet,
       };
     },
@@ -232,17 +253,28 @@ export function getReportTotal(store: MixerBatch[]) {
         set: 0,
       },
       total: 0,
+      targetTotal: 0,
     },
   );
 }
 
 export function formatWeight(weightInKg: number) {
   if (weightInKg >= 1000) {
-    const weightInTons = (weightInKg / 1000).toFixed(3);
-    return `${weightInTons.replace(".", ",")} т`;
+    const weightInTons = (weightInKg / 1000).toLocaleString("uk-UA", {
+      maximumFractionDigits: 3,
+    });
+    return `${weightInTons} т`;
   }
-  const weightInKilograms = weightInKg.toFixed(2);
-  return `${weightInKilograms.replace(".", ",")} кг`;
+  const weightInKilograms = weightInKg.toLocaleString("uk-UA", {
+    maximumFractionDigits: 2,
+  });
+  return `${weightInKilograms} кг`;
+}
+
+export function formatNumericRow(value: number) {
+  return value.toLocaleString("uk-UA", {
+    maximumFractionDigits: 2,
+  });
 }
 
 export function getFilteredReport({

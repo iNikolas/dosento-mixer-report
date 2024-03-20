@@ -26,8 +26,15 @@ export function Footer() {
         <td>{formatWeight(total.oilDoa.set)}</td>
         <td>{formatWeight(total.oilDoa.actual)}</td>
         <td>{formatWeight(total.nbr.set)}</td>
-        <td>Всього фактично</td>
-        <td>{formatWeight(total.total)}</td>
+        <td>
+          Всього ціль: <br />
+          Всього фактично:
+        </td>
+        <td>
+          {formatWeight(total.targetTotal)}
+          <br />
+          {formatWeight(total.total)}
+        </td>
         <th>#</th>
       </tr>
     </tfoot>
