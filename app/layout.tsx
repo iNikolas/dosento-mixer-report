@@ -12,9 +12,9 @@ import { Navbar } from "@/components";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Отчет Миксера [LLC DOCENTO POLYMER]",
+  title: "Управління звітами міксера [LLC DOCENTO POLYMER]",
   description:
-    "Загрузите CSV файл с отчетом для его удобного просмотра и выгрузки данных",
+    "Оптимізуйте робочий процес зчитування, сортування та аналізу звітів з міксерного виробництва у форматі CSV. Зручне відображення, сортування та фільтрація даних з підсумками за кожним стовпцем.",
 };
 
 export default function RootLayout({
