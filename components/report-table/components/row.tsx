@@ -39,8 +39,8 @@ export function Row({
       <td>{formatNumericRow(data.oilDoa.set)}</td>
       <td>{formatNumericRow(data.oilDoa.actual)}</td>
       <td>{formatNumericRow(data.nbr.set)}</td>
-      <td>{data.current}</td>
       <td>{data.total}</td>
+      <td>{data.current}</td>
       <th>{recordNumber}</th>
     </motion.tr>
   );

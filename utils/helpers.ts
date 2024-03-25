@@ -117,8 +117,8 @@ function buildMixerBatch(list: unknown[]): MixerBatchTable {
           nbr: {
             set: getNumericValue(record[16 - dataOffset]),
           },
-          current: getNumericValue(record[17 - dataOffset]) + 1,
-          total: getNumericValue(record[18 - dataOffset]),
+          total: getNumericValue(record[17 - dataOffset]),
+          current: getNumericValue(record[18 - dataOffset]) + 1,
         },
       };
     }
