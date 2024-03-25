@@ -1,6 +1,7 @@
 /* eslint-disable global-require */
 /* eslint-disable import/no-extraneous-dependencies */
 import type { Config } from "tailwindcss";
+import { themes } from "./config";
 
 const config: Config = {
   content: [
@@ -19,7 +20,7 @@ const config: Config = {
   },
   plugins: [require("@tailwindcss/typography"), require("daisyui")],
   daisyui: {
-    themes: ["dracula"],
+    themes: Object.values(themes),
   },
 };
 export default config;

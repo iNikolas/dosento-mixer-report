@@ -4,6 +4,7 @@ import Link from "next/link";
 import BurgerIcon from "@/assets/icons/burger.svg";
 
 import { Links } from "./components";
+import { ThemeToggle } from "../theme-toggle";
 
 export function Navbar() {
   return (
@@ -13,8 +14,13 @@ export function Navbar() {
           <div tabIndex={0} role="button" className="btn btn-ghost sm:hidden">
             <BurgerIcon className="h-5 w-5" />
           </div>
-          <ul className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+          <ul className="menu menu-sm dropdown-content mt-3 z-10 p-2 shadow bg-base-100 rounded-box w-52">
             <Links />
+            <li>
+              <button type="button" className="w-fit p-0 ml-3 my-1">
+                <ThemeToggle />
+              </button>
+            </li>
           </ul>
         </div>
         <Link href="/" className="btn btn-ghost text-xl">
@@ -25,6 +31,7 @@ export function Navbar() {
         <ul className="menu menu-horizontal px-1">
           <Links />
         </ul>
+        <ThemeToggle className="mr-4" />
       </div>
     </nav>
   );
