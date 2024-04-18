@@ -2,7 +2,7 @@ import { createStore, createEvent, sample, combine } from "effector";
 import { createGate } from "effector-react";
 import { persist } from "effector-storage/local";
 
-import { MixerBatch, MixerBatchTable } from "@/entities";
+import { MixerBatchTable, MixerReport } from "@/entities";
 import {
   parseFileFx,
   readFromeRemoteStorageFx,
@@ -26,7 +26,7 @@ export const readDatabaseRequested = createEvent();
 export const readLocalStorageeRequested = createEvent();
 
 const $mixerBatch = createStore<MixerBatchTable>({});
-export const $report = createStore<MixerBatch[]>([]);
+export const $report = createStore<MixerReport[]>([]);
 export const $total = $report.map(getReportTotal);
 export const $loading = combine(
   [parseFileFx.pending, readFromeRemoteStorageFx.pending],

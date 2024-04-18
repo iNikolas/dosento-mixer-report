@@ -11,11 +11,15 @@ import {
   supportedFormats,
 } from "@/config";
 import {
+  FeederOffset,
+  FeederRecord,
   Filter,
   MixerBatch,
   MixerBatchTable,
   MixerBatchTotal,
+  MixerReport,
 } from "@/entities";
+import { tolerance } from "@/config/feeder";
 
 function parseFileExtension(name?: string): string | null {
   if (!name) {
@@ -277,13 +281,43 @@ export function formatNumericRow(value: number) {
   });
 }
 
+function computeFeederOffset({ set, actual }: FeederRecord): FeederOffset {
+  if (set <= 0) {
+    return { offset: 0, error: false, warning: false };
+  }
+
+  const offset = parseFloat((((actual - set) / set) * 100).toFixed(2));
+  const absOffset = Math.abs(offset);
+  return {
+    offset,
+    error: absOffset > tolerance,
+    warning: absOffset > tolerance / 2,
+  };
+}
+
+function makeReport(record: MixerBatch): MixerReport {
+  const { caco3, pvc, feeder3, feeder4, oilDoa, oilDop } = record;
+  return {
+    ...record,
+    caco3: {
+      ...caco3,
+      ...computeFeederOffset(caco3),
+    },
+    pvc: { ...pvc, ...computeFeederOffset(pvc) },
+    feeder3: { ...feeder3, ...computeFeederOffset(feeder3) },
+    feeder4: { ...feeder4, ...computeFeederOffset(feeder4) },
+    oilDoa: { ...oilDoa, ...computeFeederOffset(oilDoa) },
+    oilDop: { ...oilDop, ...computeFeederOffset(oilDop) },
+  };
+}
+
 export function getFilteredReport({
   mixerBatch,
   filter,
 }: {
   mixerBatch: MixerBatchTable;
   filter: Filter;
-}) {
+}): MixerReport[] {
   const search = filter.search.trim();
   const { startTimestamp, endTimestamp } = filter;
   const report = Object.values(mixerBatch);
@@ -301,27 +335,29 @@ export function getFilteredReport({
   }
 
   if (search || (startTimestamp ?? endTimestamp)) {
-    return report.filter((batch) => {
-      if (
-        search &&
-        !batch.recipe.toLowerCase().includes(search.toLowerCase())
-      ) {
-        return false;
-      }
+    return report
+      .filter((batch) => {
+        if (
+          search &&
+          !batch.recipe.toLowerCase().includes(search.toLowerCase())
+        ) {
+          return false;
+        }
 
-      if (startTimestamp && batch.timestamp < startTimestamp) {
-        return false;
-      }
+        if (startTimestamp && batch.timestamp < startTimestamp) {
+          return false;
+        }
 
-      if (endTimestamp && batch.timestamp > endTimestamp) {
-        return false;
-      }
+        if (endTimestamp && batch.timestamp > endTimestamp) {
+          return false;
+        }
 
-      return true;
-    });
+        return true;
+      })
+      .map(makeReport);
   }
 
-  return report;
+  return report.map<MixerReport>(makeReport);
 }
 
 export function getLatestBatchRecord(mixerbatch: MixerBatchTable) {

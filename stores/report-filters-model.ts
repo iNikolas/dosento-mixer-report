@@ -13,15 +13,18 @@ import {
 import { deserializeDate, getUtcTimestamp, serializeDate } from "@/utils";
 
 export const DatePickerGate = createGate();
+export const AnaliticGate = createGate();
 
 export const filterColumnChanged = createEvent<SortingFilters>();
 export const filterStartDateChanged = createEvent<Date | null>();
 export const filterEndDateChanged = createEvent<Date | null>();
 export const searchInputChanged = createEvent<string>();
+export const toggleShowAnaliticRequested = createEvent();
 
 export const $searchInput = createStore("");
 export const $startDate = createStore<Date | null>(null);
 export const $endDate = createStore<Date | null>(null);
+export const $showAnalitic = createStore(true);
 
 const $searchSanitized = $searchInput.map((search) => search.trim());
 const $startTimestamp = $startDate.map(getUtcTimestamp);
@@ -53,6 +56,19 @@ persist({
   pickup: DatePickerGate.open,
   serialize: serializeDate,
   deserialize: deserializeDate,
+});
+
+persist({
+  store: $showAnalitic,
+  key: "filter-show-analitic",
+  pickup: AnaliticGate.open,
+});
+
+sample({
+  clock: toggleShowAnaliticRequested,
+  source: $showAnalitic,
+  fn: (prevState) => !prevState,
+  target: $showAnalitic,
 });
 
 sample({
