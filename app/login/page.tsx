@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useForm } from "effector-forms";
-import { useUnit } from "effector-react";
+import { useGate, useUnit } from "effector-react";
 import { MdEmail } from "react-icons/md";
 import { PiPasswordBold } from "react-icons/pi";
 
@@ -13,6 +13,7 @@ import { links } from "@/config";
 import { loginModel } from "@/stores";
 
 export default function LoginPage() {
+  useGate(loginModel.Gate);
   const { fields, submit, eachValid } = useForm(loginModel.form);
   const loading = useUnit(loginModel.$loading);
 
