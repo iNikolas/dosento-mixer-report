@@ -14,6 +14,7 @@
     "date-fns": "^2.0.0",
     "date-fns-tz": "^2.0.1",
     "effector": "^23.2.0",
+    "effector-final-form": "^0.10.0",
     "effector-react": "^23.2.0",
     "effector-storage": "^7.1.0",
     "eslint-plugin-effector": "^0.13.0",
@@ -28,7 +29,8 @@
     "react-icons": "^5.0.1",
     "react-toastify": "^10.0.5",
     "react-toggle-dark-mode": "^1.1.1",
-    "tailwind-merge": "^2.2.1"
+    "tailwind-merge": "^2.2.1",
+    "validator": "^13.11.0"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
@@ -39,6 +41,7 @@
     "@types/react": "^18",
     "@types/react-datepicker": "^6.2.0",
     "@types/react-dom": "^18",
+    "@types/validator": "^13.11.9",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "autoprefixer": "^10.0.1",
