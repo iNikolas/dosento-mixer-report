@@ -1,54 +1,27 @@
-import React from "react";
-import { createEvent, sample } from "effector";
-import { createForm } from "effector-final-form";
-import { validateEmail, validatePassword } from "@/utils";
+import { combine, sample } from "effector";
+import { createForm } from "effector-forms";
+import { loginFx } from "@/effects";
 
-export const emailFieldChanged =
-  createEvent<React.ChangeEvent<HTMLInputElement>>();
-export const passwordFieldChanged =
-  createEvent<React.ChangeEvent<HTMLInputElement>>();
-export const formSubmitted = createEvent<React.FormEvent<HTMLFormElement>>();
+import { rules } from "@/utils";
+import { minimumPasswordLength } from "@/config";
 
-export const form = createForm<{ email: string; password: string }>({
-  onSubmit: (values, f) => {
-    console.log(values);
+export const form = createForm({
+  fields: {
+    email: {
+      init: "",
+      rules: [rules.required(), rules.email()],
+      validateOn: ["blur"],
+    },
+    password: {
+      init: "",
+      rules: [rules.required(), rules.minLength(minimumPasswordLength)],
+      validateOn: ["blur"],
+    },
   },
-  subscribeOn: [
-    "values",
-    "errors",
-    "submitting",
-    "submitSucceeded",
-    "submitFailed",
-    "submitErrors",
-  ],
 });
 
-export const emailField = form.api.registerField({
-  name: "email",
-  subscribeOn: [],
-  validate: validateEmail,
-});
+export const $loading = combine([loginFx.pending], (tuple) =>
+  tuple.some(Boolean),
+);
 
-export const passwordField = form.api.registerField({
-  name: "password",
-  subscribeOn: [],
-  validate: validatePassword,
-});
-
-sample({
-  clock: emailFieldChanged,
-  fn: (e) => e.target.value,
-  target: [emailField.api.changeFx],
-});
-
-sample({
-  clock: passwordFieldChanged,
-  fn: (e) => e.target.value,
-  target: [passwordField.api.changeFx],
-});
-
-sample({
-  clock: formSubmitted,
-  fn: (e) => e.preventDefault(),
-  target: form.api.submitFx,
-});
+sample({ clock: form.formValidated, target: loginFx });
