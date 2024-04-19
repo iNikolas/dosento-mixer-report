@@ -28,6 +28,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "components/promo-wrapper"  ],
+  ],
   "exclude": ["node_modules"]
 }
