@@ -1,6 +1,8 @@
 export const links = {
   uploadData: "/",
   report: "/reports",
+  login: "/login",
+  register: "/register",
 } as const;
 
 export const routes = [

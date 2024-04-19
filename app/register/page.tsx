@@ -6,8 +6,9 @@ import { MdEmail } from "react-icons/md";
 import { PiPasswordBold } from "react-icons/pi";
 import { FaUserTie } from "react-icons/fa6";
 
-import { InputWithIcon } from "@/components/shared";
+import { AnimatedButton, InputWithIcon } from "@/components/shared";
 import { PromoWrapper } from "@/components";
+import { links } from "@/config";
 
 export default function RegisterPage() {
   return (
@@ -30,13 +31,11 @@ export default function RegisterPage() {
           placeholder="Підтвердьте пароль"
           Icon={PiPasswordBold}
         />
-        <button type="submit" className="mt-2 btn btn-primary grow">
-          Зареєструватися
-        </button>
+        <AnimatedButton type="submit">Зареєструватися</AnimatedButton>
       </form>
       <div>
         <h3>Вже маєте акаунт?</h3>
-        <Link href="/login">Логін</Link>
+        <Link href={links.login}>Логін</Link>
       </div>
     </PromoWrapper>
   );

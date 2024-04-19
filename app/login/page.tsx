@@ -5,8 +5,9 @@ import Link from "next/link";
 import { MdEmail } from "react-icons/md";
 import { PiPasswordBold } from "react-icons/pi";
 
-import { InputWithIcon } from "@/components/shared";
+import { AnimatedButton, InputWithIcon } from "@/components/shared";
 import { PromoWrapper } from "@/components";
+import { links } from "@/config";
 
 export default function LoginPage() {
   return (
@@ -23,13 +24,11 @@ export default function LoginPage() {
           placeholder="Пароль"
           Icon={PiPasswordBold}
         />
-        <button type="submit" className="mt-2 btn btn-primary grow">
-          Логін
-        </button>
+        <AnimatedButton type="submit">Логін</AnimatedButton>
       </form>
       <div>
         <h3>Немає облікового запису?</h3>
-        <Link href="/register">Зареєструватися</Link>
+        <Link href={links.register}>Зареєструватися</Link>
       </div>
     </PromoWrapper>
   );
