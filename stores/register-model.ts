@@ -1,10 +1,14 @@
 import { combine, sample } from "effector";
 import { createGate } from "effector-react";
 import { createForm } from "effector-forms";
-import { loginFx, registerFx } from "@/effects";
+import { loginFx, registerFx, showErrorMessageFx } from "@/effects";
 
 import { rules } from "@/utils";
-import { minimumPasswordLength } from "@/config";
+import { links, minimumPasswordLength } from "@/config";
+import { navigate } from "@/app/actions";
+import { authErrors } from "@/firebase";
+
+import { $currentUser } from "./user-model";
 
 export const Gate = createGate();
 
@@ -40,3 +44,46 @@ export const $loading = combine([loginFx.pending], (tuple) =>
 sample({ clock: form.formValidated, target: registerFx });
 
 sample({ clock: Gate.close, target: form.reset });
+
+sample({
+  clock: registerFx.done,
+  fn: async () => {
+    await navigate(links.report);
+  },
+});
+
+sample({
+  clock: registerFx.failData,
+  filter: ({ message }) =>
+    !authErrors.email[message] && !authErrors.password[message],
+  target: showErrorMessageFx,
+});
+
+sample({
+  clock: registerFx.failData,
+  filter: ({ message }) => Boolean(authErrors.email[message]),
+  fn: ({ message }) => ({
+    rule: "api-email-error",
+    errorText: authErrors.email[message],
+  }),
+  target: form.fields.email.addError,
+});
+
+sample({
+  clock: registerFx.failData,
+  filter: ({ message }) => Boolean(authErrors.password[message]),
+  fn: ({ message }) => ({
+    rule: "api-password-error",
+    errorText: authErrors.password[message],
+  }),
+  target: form.fields.password.addError,
+});
+
+sample({
+  clock: [Gate.open, $currentUser],
+  source: $currentUser,
+  filter: Boolean,
+  fn: async () => {
+    await navigate(links.report);
+  },
+});
