@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@effector/next": "^0.7.0",
-    "axios": "^1.6.8",
     "clsx": "^2.1.0",
     "date-fns": "^2.0.0",
     "date-fns-tz": "^2.0.1",

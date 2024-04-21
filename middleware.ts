@@ -1,12 +1,13 @@
-import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import { authCookieKey, authRoutes, links, protectedRoutes } from "@/config";
 
 export async function middleware(request: NextRequest) {
   const session = request.cookies.get(authCookieKey);
-  const isAuthRoute = authRoutes.some((route) => request.url.startsWith(route));
+  const isAuthRoute = authRoutes.some((route) =>
+    request.nextUrl.pathname.startsWith(route),
+  );
   const isProtectedRoute = protectedRoutes.some((route) =>
-    request.url.startsWith(route),
+    request.nextUrl.pathname.startsWith(route),
   );
 
   if (!session && isProtectedRoute) {
@@ -19,7 +20,7 @@ export async function middleware(request: NextRequest) {
 
   if (session && isProtectedRoute) {
     try {
-      const responseAPI = await axios.get("/api/login", {
+      const responseAPI = await fetch(`${request.nextUrl.origin}/api/login`, {
         headers: {
           Cookie: `session=${session?.value}`,
         },

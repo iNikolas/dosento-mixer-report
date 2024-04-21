@@ -1,6 +1,7 @@
 export const authErrors: {
   email: Record<string, string>;
   password: Record<string, string>;
+  login: Record<string, string>;
 } = {
   email: {
     "auth/email-already-in-use":
@@ -8,4 +9,7 @@ export const authErrors: {
     "auth/invalid-email": "Це недійсна електронна пошта",
   },
   password: { "auth/invalid-password": "Цей пароль недійсний" },
+  login: {
+    "auth/invalid-credential": "Облікові дані для входу недійсні",
+  },
 };

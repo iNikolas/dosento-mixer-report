@@ -37,6 +37,7 @@ sample({
   clock: loginFx.failData,
   filter: ({ message }) =>
     !authErrors.email[message] && !authErrors.password[message],
+  fn: ({ message }) => new Error(authErrors.login[message] ?? message),
   target: showErrorMessageFx,
 });
 

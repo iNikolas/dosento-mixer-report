@@ -8,6 +8,7 @@ import { userModel } from "@/stores";
 import { auth } from "@/auth";
 
 export function UserDropdown() {
+  const logoutUserHandler = useUnit(userModel.logoutRequested);
   const handleAuthStateChanged = useUnit(userModel.authStateChanged);
 
   const user = useUnit(userModel.$currentUser);
@@ -50,7 +51,9 @@ export function UserDropdown() {
           <a>Settings</a>
         </li>
         <li>
-          <a>Logout</a>
+          <button onClick={logoutUserHandler} type="button">
+            Вийти
+          </button>
         </li>
       </ul>
     </div>

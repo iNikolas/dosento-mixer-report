@@ -1,12 +1,12 @@
 import { auth as firebaseAuth } from "firebase-admin";
 import { cookies, headers } from "next/headers";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-import { firebaseAdminApp } from "@/firebase";
-import { authCookieKey, cookieExpirationDays } from "@/config";
+import { authCookieKey, cookieExpirationDays, links } from "@/config";
+import { getAdminApp } from "@/firebase/admin-app";
 
 export async function GET() {
-  const auth = firebaseAuth(firebaseAdminApp);
+  const auth = firebaseAuth(getAdminApp());
   const session = cookies().get(authCookieKey)?.value ?? "";
 
   if (!session) {
@@ -22,8 +22,8 @@ export async function GET() {
   return NextResponse.json({ isLogged: true }, { status: 200 });
 }
 
-export async function POST() {
-  const auth = firebaseAuth(firebaseAdminApp);
+export async function POST(request: NextRequest) {
+  const auth = firebaseAuth(getAdminApp());
   const authorization = headers().get("Authorization");
   if (authorization?.startsWith("Bearer ")) {
     const idToken = authorization.split("Bearer ")[1];
@@ -46,10 +46,10 @@ export async function POST() {
     }
   }
 
-  return NextResponse.json({}, { status: 200 });
+  return NextResponse.redirect(new URL(links.report, request.url));
 }
 
-export function DELETE() {
+export function DELETE(request: NextRequest) {
   const options = {
     name: authCookieKey,
     value: "",
@@ -57,5 +57,5 @@ export function DELETE() {
   };
 
   cookies().set(options);
-  return NextResponse.json({}, { status: 200 });
+  return NextResponse.redirect(new URL(links.login, request.url));
 }
