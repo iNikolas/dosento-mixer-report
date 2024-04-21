@@ -4,11 +4,8 @@ import { createForm } from "effector-forms";
 import { loginFx, registerFx, showErrorMessageFx } from "@/effects";
 
 import { rules } from "@/utils";
-import { links, minimumPasswordLength } from "@/config";
-import { navigate } from "@/app/actions";
+import { minimumPasswordLength } from "@/config";
 import { authErrors } from "@/firebase";
-
-import { $currentUser } from "./user-model";
 
 export const Gate = createGate();
 
@@ -46,13 +43,6 @@ sample({ clock: form.formValidated, target: registerFx });
 sample({ clock: Gate.close, target: form.reset });
 
 sample({
-  clock: registerFx.done,
-  fn: async () => {
-    await navigate(links.report);
-  },
-});
-
-sample({
   clock: registerFx.failData,
   filter: ({ message }) =>
     !authErrors.email[message] && !authErrors.password[message],
@@ -77,13 +67,4 @@ sample({
     errorText: authErrors.password[message],
   }),
   target: form.fields.password.addError,
-});
-
-sample({
-  clock: [Gate.open, $currentUser],
-  source: $currentUser,
-  filter: Boolean,
-  fn: async () => {
-    await navigate(links.report);
-  },
 });

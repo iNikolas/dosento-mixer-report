@@ -4,3 +4,4 @@ export * from "./filters";
 export * from "./firebase";
 export * from "./theme";
 export * from "./auth-constraints";
+export * from "./auth";

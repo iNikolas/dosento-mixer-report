@@ -6,3 +6,5 @@ export const authStateChanged = createEvent<User | null>();
 export const $currentUser = createStore<User | null>(null);
 
 sample({ clock: authStateChanged, target: $currentUser });
+
+$currentUser.watch((user) => console.log(user));

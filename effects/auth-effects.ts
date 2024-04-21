@@ -8,12 +8,19 @@ import {
 
 import { LoginCredentials, RegisterCredentials } from "@/entities";
 import { auth } from "@/auth";
-import { extractFirebaseErrorCode } from "@/utils";
+import {
+  discardTokenLogin,
+  extractFirebaseErrorCode,
+  loginWithToken,
+} from "@/utils";
 
 export const loginFx = createEffect(
   async ({ email, password }: LoginCredentials) => {
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
+      const token = await user.getIdToken();
+      await loginWithToken(token);
+
       return user;
     } catch (e) {
       throw new Error(extractFirebaseErrorCode(e));
@@ -31,6 +38,9 @@ export const registerFx = createEffect(
       );
       await updateProfile(user, { displayName: fullname });
 
+      const token = await user.getIdToken();
+      await loginWithToken(token);
+
       return user;
     } catch (e) {
       throw new Error(extractFirebaseErrorCode(e));
@@ -41,6 +51,7 @@ export const registerFx = createEffect(
 export const logoutFx = createEffect(async () => {
   try {
     await signOut(auth);
+    await discardTokenLogin();
   } catch (e) {
     throw new Error(extractFirebaseErrorCode(e));
   }
