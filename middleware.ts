@@ -28,11 +28,12 @@ export async function middleware(request: NextRequest) {
     try {
       const responseAPI = await fetch(request.nextUrl.origin + api.login, {
         headers: {
-          Cookie: `session=${session?.value}`,
+          Cookie: `session=${session.value}`,
         },
       });
 
-      if (responseAPI.status !== 200) {
+      if (!responseAPI.ok) {
+        await fetch(api.login, { method: "DELETE" });
         return NextResponse.redirect(new URL(links.login, request.url));
       }
     } catch (error) {
