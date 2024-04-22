@@ -1,9 +1,10 @@
+import { NextResponse } from "next/server";
 import { auth as firebaseAuth } from "firebase-admin";
 import { cookies, headers } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
 
-import { authCookieKey, cookieExpirationDays, links } from "@/config";
+import { authCookieKey, cookieExpirationDays, userCookieKey } from "@/config";
 import { getAdminApp } from "@/firebase/admin-app";
+import { getUserFromSessionCookie } from "@/utils";
 
 export async function GET() {
   const auth = firebaseAuth(getAdminApp());
@@ -22,7 +23,7 @@ export async function GET() {
   return NextResponse.json({ isLogged: true }, { status: 200 });
 }
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   const auth = firebaseAuth(getAdminApp());
   const authorization = headers().get("Authorization");
   if (authorization?.startsWith("Bearer ")) {
@@ -34,28 +35,37 @@ export async function POST(request: NextRequest) {
       const sessionCookie = await auth.createSessionCookie(idToken, {
         expiresIn,
       });
-      const options = {
+
+      cookies().set({
         name: authCookieKey,
         value: sessionCookie,
         maxAge: expiresIn,
         httpOnly: true,
         secure: true,
-      };
+      });
 
-      cookies().set(options);
+      const user = await getUserFromSessionCookie(sessionCookie);
+
+      cookies().set({
+        name: userCookieKey,
+        value: JSON.stringify(user),
+        maxAge: expiresIn,
+        secure: true,
+      });
     }
   }
 
-  return NextResponse.redirect(new URL(links.report, request.url));
+  return NextResponse.json({}, { status: 200 });
 }
 
-export function DELETE(request: NextRequest) {
+export function DELETE() {
   const options = {
-    name: authCookieKey,
     value: "",
     maxAge: -1,
   };
 
-  cookies().set(options);
-  return NextResponse.redirect(new URL(links.login, request.url));
+  cookies().set({ name: authCookieKey, ...options });
+  cookies().set({ name: userCookieKey, ...options });
+
+  return NextResponse.json({}, { status: 200 });
 }

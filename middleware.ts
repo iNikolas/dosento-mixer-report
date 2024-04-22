@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { authCookieKey, authRoutes, links, protectedRoutes } from "@/config";
+import {
+  api,
+  authCookieKey,
+  authRoutes,
+  links,
+  protectedRoutes,
+} from "@/config";
 
 export async function middleware(request: NextRequest) {
   const session = request.cookies.get(authCookieKey);
@@ -20,7 +26,7 @@ export async function middleware(request: NextRequest) {
 
   if (session && isProtectedRoute) {
     try {
-      const responseAPI = await fetch(`${request.nextUrl.origin}/api/login`, {
+      const responseAPI = await fetch(request.nextUrl.origin + api.login, {
         headers: {
           Cookie: `session=${session?.value}`,
         },

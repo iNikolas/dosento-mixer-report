@@ -1,10 +1,10 @@
 import { combine, sample } from "effector";
 import { createGate } from "effector-react";
 import { createForm } from "effector-forms";
-import { loginFx, registerFx, showErrorMessageFx } from "@/effects";
+import { loginFx, redirectFx, registerFx, showErrorMessageFx } from "@/effects";
 
 import { rules } from "@/utils";
-import { minimumPasswordLength } from "@/config";
+import { links, minimumPasswordLength } from "@/config";
 import { authErrors } from "@/firebase";
 
 export const Gate = createGate();
@@ -41,6 +41,12 @@ export const $loading = combine([loginFx.pending], (tuple) =>
 sample({ clock: form.formValidated, target: registerFx });
 
 sample({ clock: Gate.close, target: form.reset });
+
+sample({
+  clock: registerFx.doneData,
+  fn: () => links.report,
+  target: redirectFx,
+});
 
 sample({
   clock: registerFx.failData,

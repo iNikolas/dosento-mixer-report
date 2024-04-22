@@ -5,6 +5,10 @@ export const links = {
   register: "/register",
 } as const;
 
+export const api = {
+  login: "/api/login",
+} as const;
+
 export const routes = [
   { label: "Завантажити звіт", path: links.uploadData },
   { label: "Звіти", path: links.report },

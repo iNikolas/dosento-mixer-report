@@ -381,3 +381,12 @@ export function extractFirebaseErrorCode(error: unknown) {
 
   throw error;
 }
+
+export function getAcronim(input: string) {
+  const words = input.toUpperCase().split(" ");
+
+  const firstWord = words[0] ?? "";
+  const secondWord = words[1] ?? "";
+
+  return firstWord[0] + secondWord[0];
+}
