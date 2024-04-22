@@ -1,7 +1,7 @@
 import { combine, sample } from "effector";
 import { createGate } from "effector-react";
 import { createForm } from "effector-forms";
-import { loginFx, redirectFx, registerFx, showErrorMessageFx } from "@/effects";
+import { redirectFx, registerFx, showErrorMessageFx } from "@/effects";
 
 import { rules } from "@/utils";
 import { links, minimumPasswordLength } from "@/config";
@@ -34,7 +34,7 @@ export const form = createForm({
   },
 });
 
-export const $loading = combine([loginFx.pending], (tuple) =>
+export const $loading = combine([registerFx.pending], (tuple) =>
   tuple.some(Boolean),
 );
 

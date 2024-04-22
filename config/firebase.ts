@@ -18,3 +18,5 @@ export const serviceAccount = {
 } as const;
 
 export const reportsCollectionName = "plant_reports";
+export const adminCollectionName = "admin";
+export const authorizedUsersDocumentName = "authorized_users";

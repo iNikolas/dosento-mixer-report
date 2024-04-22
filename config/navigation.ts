@@ -3,6 +3,7 @@ export const links = {
   report: "/reports",
   login: "/login",
   register: "/register",
+  notAuthorized: "/not-authorized",
 } as const;
 
 export const api = {

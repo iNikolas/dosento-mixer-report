@@ -4,7 +4,7 @@ import { cookies, headers } from "next/headers";
 
 import { authCookieKey, cookieExpirationDays, userCookieKey } from "@/config";
 import { getAdminApp } from "@/firebase/admin-app";
-import { getUserFromSessionCookie } from "@/utils";
+import { getUserFromSessionCookie, isAuthorizedUser } from "@/utils";
 
 export async function GET() {
   const auth = firebaseAuth(getAdminApp());
@@ -20,7 +20,12 @@ export async function GET() {
     return NextResponse.json({ isLogged: false }, { status: 401 });
   }
 
-  return NextResponse.json({ isLogged: true }, { status: 200 });
+  const isAuthorized = await isAuthorizedUser(decodedClaims.uid);
+
+  return NextResponse.json(
+    { isLogged: true },
+    { status: isAuthorized ? 200 : 401 },
+  );
 }
 
 export async function POST() {
