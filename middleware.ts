@@ -26,7 +26,7 @@ export async function middleware(request: NextRequest) {
 
   if (session && isProtectedRoute) {
     try {
-      const responseAPI = await fetch(api.login, {
+      const responseAPI = await fetch(`${request.nextUrl.origin}${api.login}`, {
         headers: {
           Cookie: `session=${session.value}`,
         },
