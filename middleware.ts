@@ -33,7 +33,7 @@ export async function middleware(request: NextRequest) {
         },
       });
 
-      console.log(responseAPI);
+      console.log(responseAPI.ok);
 
       if (!responseAPI.ok) {
         await fetch(api.login, { method: "DELETE" });
