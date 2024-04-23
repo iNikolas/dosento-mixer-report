@@ -1,5 +1,6 @@
 import Papa from "papaparse";
 import clsx, { ClassValue } from "clsx";
+import { FirebaseError } from "firebase/app";
 import { twMerge } from "tailwind-merge";
 
 import {
@@ -371,4 +372,21 @@ export function getLatestBatchRecord(mixerbatch: MixerBatchTable) {
     },
     null,
   );
+}
+
+export function extractFirebaseErrorCode(error: unknown) {
+  if (error instanceof FirebaseError) {
+    return error.code;
+  }
+
+  throw error;
+}
+
+export function getAcronim(input: string) {
+  const words = input.toUpperCase().split(" ");
+
+  const firstWord = words[0] ?? "";
+  const secondWord = words[1] ?? "";
+
+  return firstWord[0] + secondWord[0];
 }

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import BurgerIcon from "@/assets/icons/burger.svg";
 
-import { Links } from "./components";
+import { Links, UserDropdown } from "./components";
 import { ThemeToggle } from "../theme-toggle";
 
 export function Navbar() {
@@ -27,11 +27,12 @@ export function Navbar() {
           ТОВ &quot;ДОСЕНТО ПОЛІМЕР&quot;
         </Link>
       </div>
-      <div className="navbar-end hidden sm:flex">
-        <ul className="menu menu-horizontal px-1">
+      <div className="navbar-end">
+        <ul className="menu menu-horizontal px-1 hidden sm:flex">
           <Links />
         </ul>
-        <ThemeToggle className="mr-4" />
+        <ThemeToggle className="mr-4 hidden sm:flex" />
+        <UserDropdown />
       </div>
     </nav>
   );

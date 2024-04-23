@@ -5,7 +5,7 @@ import { useGate, useUnit } from "effector-react";
 import { TbWorldDownload } from "react-icons/tb";
 
 import { cn } from "@/utils";
-import { mixerBatchModel } from "@/stores";
+import { mixerBatchModel, userModel } from "@/stores";
 
 export function ReadDatabaseButton({
   className,
@@ -18,24 +18,30 @@ export function ReadDatabaseButton({
 
   const loading = useUnit(mixerBatchModel.$loading);
   const readDatabaseRequested = useUnit(mixerBatchModel.readDatabaseRequested);
+  const user = useUnit(userModel.$currentUser);
 
   return (
-    <button
-      disabled={loading}
-      type="button"
-      className={cn("btn btn-neuteral glass", className)}
-      onClick={readDatabaseRequested}
-      {...props}
+    <div
+      className={cn(!user && "tooltip", "self-stretch")}
+      data-tip="Спочатку авторизуйтеся"
     >
-      {loading ? (
-        <>
-          <span className="loading loading-spinner" /> завантаження...
-        </>
-      ) : (
-        <>
-          <TbWorldDownload className="h-6 w-6" /> Завантажити дані
-        </>
-      )}
-    </button>
+      <button
+        disabled={loading || !user}
+        type="button"
+        className={cn("w-full btn btn-neuteral glass", className)}
+        onClick={readDatabaseRequested}
+        {...props}
+      >
+        {loading ? (
+          <>
+            <span className="loading loading-spinner" /> завантаження...
+          </>
+        ) : (
+          <>
+            <TbWorldDownload className="h-6 w-6" /> Завантажити дані
+          </>
+        )}
+      </button>
+    </div>
   );
 }

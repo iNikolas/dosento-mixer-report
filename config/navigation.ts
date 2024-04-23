@@ -1,6 +1,13 @@
 export const links = {
   uploadData: "/",
   report: "/reports",
+  login: "/login",
+  register: "/register",
+  notAuthorized: "/not-authorized",
+} as const;
+
+export const api = {
+  login: "/api/login",
 } as const;
 
 export const routes = [
