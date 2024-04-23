@@ -4,6 +4,7 @@ export const links = {
   login: "/login",
   register: "/register",
   notAuthorized: "/not-authorized",
+  passwordReset: "/password-reset",
 } as const;
 
 export const api = {
