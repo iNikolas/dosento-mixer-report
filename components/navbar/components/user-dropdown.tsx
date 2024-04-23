@@ -30,12 +30,9 @@ export function UserDropdown() {
       <ul className="mt-3 z-10 p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
         <li>
           <button type="button" className="justify-between">
-            Profile
-            <span className="badge">New</span>
+            Профіль
+            <span className="badge">В розробці</span>
           </button>
-        </li>
-        <li>
-          <button type="button">Settings</button>
         </li>
         <li>
           <button onClick={logoutUserHandler} type="button">
