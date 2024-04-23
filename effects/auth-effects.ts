@@ -4,9 +4,14 @@ import {
   updateProfile,
   signInWithEmailAndPassword,
   signOut,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 
-import { LoginCredentials, RegisterCredentials } from "@/entities";
+import {
+  LoginCredentials,
+  PasswordResetCredentials,
+  RegisterCredentials,
+} from "@/entities";
 import { auth } from "@/auth";
 import {
   discardTokenLogin,
@@ -56,3 +61,13 @@ export const logoutFx = createEffect(async () => {
     throw new Error(extractFirebaseErrorCode(e));
   }
 });
+
+export const passwordResetFx = createEffect(
+  async ({ email }: PasswordResetCredentials) => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (e) {
+      throw new Error(extractFirebaseErrorCode(e));
+    }
+  },
+);

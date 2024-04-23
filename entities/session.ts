@@ -9,6 +9,10 @@ export interface RegisterCredentials {
   fullname: string;
 }
 
+export interface PasswordResetCredentials {
+  email: string;
+}
+
 export interface User {
   uid: string;
   email: string;

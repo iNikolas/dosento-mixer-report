@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { useGate, useUnit } from "effector-react";
 import { useForm } from "effector-forms";
 import { MdEmail } from "react-icons/md";
@@ -9,6 +10,7 @@ import { PiPasswordBold } from "react-icons/pi";
 import { loginModel } from "@/stores";
 
 import { AnimatedButton, InputWithIcon } from "../shared";
+import { links } from "@/config";
 
 export function LoginForm() {
   useGate(loginModel.Gate);
@@ -44,6 +46,9 @@ export function LoginForm() {
       <AnimatedButton disabled={loading || !eachValid} type="submit">
         Логін
       </AnimatedButton>
+      <Link className="text-xs link link-neutral" href={links.passwordReset}>
+        Забули свій пароль?
+      </Link>
     </form>
   );
 }
