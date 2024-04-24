@@ -5,4 +5,9 @@ export const authCookieKey = "session";
 export const userCookieKey = "user";
 
 export const protectedRoutes = [links.report];
-export const authRoutes = [links.login, links.register, links.passwordReset];
+export const authRoutes = [
+  links.login,
+  links.register,
+  links.passwordReset,
+  links.profile,
+];

@@ -23,10 +23,10 @@ export const rules = {
       errorText: `Мінімальна довжина – ${min} символів`,
     }),
   }),
-  confirmation: (): Rule<string> => ({
+  confirmation: (name: string): Rule<string> => ({
     name: "confirmation",
-    validator: (value, { password }) => ({
-      isValid: value === password,
+    validator: (value, fields: Record<string, string>) => ({
+      isValid: value === fields[name],
       errorText: "Паролі повинні збігатися",
     }),
   }),

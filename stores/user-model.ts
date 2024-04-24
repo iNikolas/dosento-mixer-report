@@ -13,7 +13,7 @@ import { User } from "@/entities";
 export const Gate = createGate();
 
 export const logoutRequested = createEvent();
-const fetchUserDataRequested = createEvent();
+export const fetchUserDataRequested = createEvent();
 
 export const $currentUser = createStore<User | null>(null);
 

@@ -4,18 +4,14 @@ import { createForm } from "effector-forms";
 import { passwordResetFx, showErrorMessageFx } from "@/effects";
 
 import { authErrors } from "@/firebase";
-import { rules } from "@/utils";
+import { fields } from "@/utils";
 import { PasswordResetCredentials } from "@/entities";
 
 export const Gate = createGate();
 
 export const form = createForm<PasswordResetCredentials>({
   fields: {
-    email: {
-      init: "",
-      rules: [rules.required(), rules.email()],
-      validateOn: ["blur"],
-    },
+    email: fields.email(),
   },
 });
 

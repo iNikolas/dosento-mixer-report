@@ -4,24 +4,16 @@ import { createForm } from "effector-forms";
 import { loginFx, redirectFx, showErrorMessageFx } from "@/effects";
 
 import { authErrors } from "@/firebase";
-import { rules } from "@/utils";
-import { links, minimumPasswordLength } from "@/config";
+import { fields } from "@/utils";
+import { links } from "@/config";
 import { LoginCredentials } from "@/entities";
 
 export const Gate = createGate();
 
 export const form = createForm<LoginCredentials>({
   fields: {
-    email: {
-      init: "",
-      rules: [rules.required(), rules.email()],
-      validateOn: ["blur"],
-    },
-    password: {
-      init: "",
-      rules: [rules.required(), rules.minLength(minimumPasswordLength)],
-      validateOn: ["blur"],
-    },
+    email: fields.email(),
+    password: fields.password(),
   },
 });
 

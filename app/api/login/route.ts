@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import { auth as firebaseAuth } from "firebase-admin";
 import { cookies, headers } from "next/headers";
 
-import { authCookieKey, cookieExpirationDays, userCookieKey } from "@/config";
+import { authCookieKey, cookieExpirationDays } from "@/config";
 import { getAdminApp } from "@/firebase/admin-app";
-import { getUserFromSessionCookie, isAuthorizedUser } from "@/utils";
+import { isAuthorizedUser } from "@/utils";
 
 export async function GET() {
   const auth = firebaseAuth(getAdminApp());
@@ -48,19 +48,10 @@ export async function POST() {
         httpOnly: true,
         secure: true,
       });
-
-      const user = await getUserFromSessionCookie(sessionCookie);
-
-      cookies().set({
-        name: userCookieKey,
-        value: JSON.stringify(user),
-        maxAge: expiresIn,
-        secure: true,
-      });
     }
-  }
 
-  return NextResponse.json({}, { status: 200 });
+    return NextResponse.json({}, { status: 200 });
+  }
 }
 
 export function DELETE() {
@@ -70,7 +61,6 @@ export function DELETE() {
   };
 
   cookies().set({ name: authCookieKey, ...options });
-  cookies().set({ name: userCookieKey, ...options });
 
   return NextResponse.json({}, { status: 200 });
 }

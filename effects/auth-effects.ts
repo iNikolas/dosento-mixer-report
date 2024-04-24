@@ -5,6 +5,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
   sendPasswordResetEmail,
+  updatePassword,
+  updateEmail,
 } from "firebase/auth";
 
 import {
@@ -66,6 +68,46 @@ export const passwordResetFx = createEffect(
   async ({ email }: PasswordResetCredentials) => {
     try {
       await sendPasswordResetEmail(auth, email);
+    } catch (e) {
+      throw new Error(extractFirebaseErrorCode(e));
+    }
+  },
+);
+
+export const updateProfileFx = createEffect(
+  async ({
+    displayName,
+    password,
+    email,
+  }: {
+    displayName?: string;
+    password?: string;
+    email?: string;
+  }) => {
+    try {
+      const user = auth.currentUser;
+
+      if (!user) {
+        throw new Error("Немає авторизованих користувачів");
+      }
+
+      const promises: Promise<unknown>[] = [];
+
+      if (displayName) {
+        promises.push(updateProfile(user, { displayName }));
+      }
+
+      if (password) {
+        promises.push(updatePassword(user, password));
+      }
+
+      if (email) {
+        promises.push(updateEmail(user, email));
+      }
+
+      await Promise.all(promises);
+
+      return user;
     } catch (e) {
       throw new Error(extractFirebaseErrorCode(e));
     }

@@ -1,8 +1,6 @@
-import Cookies from "js-cookie";
-
 import { User } from "@/entities";
-import { userCookieKey, api } from "@/config";
-import { assertIsUser } from "./assertions";
+import { api } from "@/config";
+import { auth } from "@/auth";
 
 export async function loginWithToken(token: string) {
   const response = await fetch(api.login, {
@@ -26,19 +24,22 @@ export async function discardTokenLogin() {
 }
 
 export function getUserData(): User | null {
-  const userJson = Cookies.get(userCookieKey);
+  const user = auth.currentUser;
 
-  if (!userJson) {
+  if (!user) {
     return null;
   }
 
-  const user: unknown = JSON.parse(userJson);
-
-  try {
-    assertIsUser(user);
-
-    return user;
-  } catch (_) {
-    return null;
+  if (!user.email) {
+    throw new Error(
+      "У даних користувача відсутнє обов’язкове поле електронної пошти",
+    );
   }
+
+  return {
+    email: user.email,
+    displayName: user.displayName ?? "",
+    emailVerified: user.emailVerified,
+    uid: user.uid,
+  };
 }
