@@ -7,10 +7,10 @@ import { useForm } from "effector-forms";
 import { MdEmail } from "react-icons/md";
 
 import { passwordResetModel } from "@/stores";
-
-import { AnimatedButton, InputWithIcon } from "../shared";
 import { links } from "@/config";
+
 import { SubmittedMessage } from "./components";
+import { AnimatedButton, InputWithIcon } from "../shared";
 
 export function PasswordResetForm() {
   useGate(passwordResetModel.Gate);

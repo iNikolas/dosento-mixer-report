@@ -1,10 +1,12 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { useGate, useUnit } from "effector-react";
 
-import { userModel } from "@/stores";
 import { getAcronim } from "@/utils";
+import { userModel } from "@/stores";
+import { links } from "@/config";
 
 export function UserDropdown() {
   useGate(userModel.Gate);
@@ -29,10 +31,7 @@ export function UserDropdown() {
       </div>
       <ul className="mt-3 z-10 p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
         <li>
-          <button type="button" className="justify-between">
-            Профіль
-            <span className="badge">В розробці</span>
-          </button>
+          <Link href={links.profile}>Профіль</Link>
         </li>
         <li>
           <button onClick={logoutUserHandler} type="button">

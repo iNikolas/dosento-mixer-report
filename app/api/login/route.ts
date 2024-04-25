@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
-import { auth as firebaseAuth } from "firebase-admin";
 import { cookies, headers } from "next/headers";
+import { auth as firebaseAuth } from "firebase-admin";
+import { getAdminApp } from "@/firebase/admin-app";
 
 import { authCookieKey, cookieExpirationDays, userCookieKey } from "@/config";
-import { getAdminApp } from "@/firebase/admin-app";
-import { getUserFromSessionCookie, isAuthorizedUser } from "@/utils";
+import {
+  deleteSessionCookies,
+  getUserFromSessionCookie,
+  isAuthorizedUser,
+} from "@/utils";
 
 export async function GET() {
   const auth = firebaseAuth(getAdminApp());
@@ -14,18 +18,22 @@ export async function GET() {
     return NextResponse.json({ isLogged: false }, { status: 401 });
   }
 
-  const decodedClaims = await auth.verifySessionCookie(session, true);
+  try {
+    const decodedClaims = await auth.verifySessionCookie(session, true);
 
-  if (!decodedClaims) {
+    if (!decodedClaims) {
+      throw new Error("Помилка перевірки сеансу користувача");
+    }
+
+    const isAuthorized = await isAuthorizedUser(decodedClaims.uid);
+
+    return NextResponse.json(
+      { isLogged: true },
+      { status: isAuthorized ? 200 : 401 },
+    );
+  } catch (e) {
     return NextResponse.json({ isLogged: false }, { status: 401 });
   }
-
-  const isAuthorized = await isAuthorizedUser(decodedClaims.uid);
-
-  return NextResponse.json(
-    { isLogged: true },
-    { status: isAuthorized ? 200 : 401 },
-  );
 }
 
 export async function POST() {
@@ -58,19 +66,13 @@ export async function POST() {
         secure: true,
       });
     }
-  }
 
-  return NextResponse.json({}, { status: 200 });
+    return NextResponse.json({}, { status: 200 });
+  }
 }
 
-export function DELETE() {
-  const options = {
-    value: "",
-    maxAge: -1,
-  };
-
-  cookies().set({ name: authCookieKey, ...options });
-  cookies().set({ name: userCookieKey, ...options });
+export async function DELETE() {
+  await deleteSessionCookies();
 
   return NextResponse.json({}, { status: 200 });
 }

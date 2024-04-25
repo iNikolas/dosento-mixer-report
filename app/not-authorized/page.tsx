@@ -13,7 +13,12 @@ export default function RegisterPage() {
         <h2 className="text-center">Вибачте!</h2>
         <h3 className="text-center">Ваш обліковий запис ще не авторизовано</h3>
 
-        <Image className="rounded" src={notAllowedPic} alt="Не дозволено" />
+        <Image
+          priority
+          className="rounded"
+          src={notAllowedPic}
+          alt="Не дозволено"
+        />
 
         <p>
           Будь ласка, попросіть керівника компанії надати вам доступ до сторінки

@@ -5,6 +5,7 @@ export const links = {
   register: "/register",
   notAuthorized: "/not-authorized",
   passwordReset: "/password-reset",
+  profile: "/profile",
 } as const;
 
 export const api = {

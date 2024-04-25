@@ -5,3 +5,4 @@ export * as loginModel from "./login-model";
 export * as registerModel from "./register-model";
 export * as userModel from "./user-model";
 export * as passwordResetModel from "./password-reset-model";
+export * as profileModel from "./profile-model";

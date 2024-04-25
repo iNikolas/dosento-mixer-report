@@ -3,34 +3,18 @@ import { createGate } from "effector-react";
 import { createForm } from "effector-forms";
 import { redirectFx, registerFx, showErrorMessageFx } from "@/effects";
 
-import { rules } from "@/utils";
-import { links, minimumPasswordLength } from "@/config";
+import { fields } from "@/utils";
+import { links } from "@/config";
 import { authErrors } from "@/firebase";
 
 export const Gate = createGate();
 
 export const form = createForm({
   fields: {
-    email: {
-      init: "",
-      rules: [rules.required(), rules.email()],
-      validateOn: ["blur"],
-    },
-    fullname: {
-      init: "",
-      rules: [rules.required(), rules.minLength(2)],
-      validateOn: ["blur"],
-    },
-    password: {
-      init: "",
-      rules: [rules.required(), rules.minLength(minimumPasswordLength)],
-      validateOn: ["blur"],
-    },
-    confirmation: {
-      init: "",
-      rules: [rules.confirmation()],
-      validateOn: ["blur"],
-    },
+    email: fields.email(),
+    fullname: fields.fullName(),
+    password: fields.password(),
+    confirmation: fields.confirmation(),
   },
 });
 
@@ -43,7 +27,7 @@ sample({ clock: form.formValidated, target: registerFx });
 sample({ clock: Gate.close, target: form.reset });
 
 sample({
-  clock: registerFx.doneData,
+  clock: registerFx.done,
   fn: () => links.report,
   target: redirectFx,
 });

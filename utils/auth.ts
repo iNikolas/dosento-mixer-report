@@ -1,7 +1,8 @@
 import Cookies from "js-cookie";
 
 import { User } from "@/entities";
-import { userCookieKey, api } from "@/config";
+import { api, userCookieKey } from "@/config";
+
 import { assertIsUser } from "./assertions";
 
 export async function loginWithToken(token: string) {

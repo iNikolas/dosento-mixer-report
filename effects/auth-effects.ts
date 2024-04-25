@@ -5,6 +5,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
   sendPasswordResetEmail,
+  updatePassword,
+  updateEmail,
 } from "firebase/auth";
 
 import {
@@ -66,6 +68,57 @@ export const passwordResetFx = createEffect(
   async ({ email }: PasswordResetCredentials) => {
     try {
       await sendPasswordResetEmail(auth, email);
+    } catch (e) {
+      throw new Error(extractFirebaseErrorCode(e));
+    }
+  },
+);
+
+export const updateProfileFx = createEffect(
+  async ({
+    newDisplayName,
+    password,
+    newPassword,
+    email,
+    newEmail,
+  }: {
+    email: string;
+    password: string;
+    newDisplayName?: string;
+    newPassword?: string;
+    newEmail?: string;
+  }) => {
+    if (!newDisplayName && !newPassword && !newEmail) {
+      throw new Error("Ви не надали оновлених даних профілю");
+    }
+
+    try {
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
+
+      if (!user) {
+        throw new Error("Не вдалося перевірити облікові дані користувача");
+      }
+
+      const promises: Promise<unknown>[] = [];
+
+      if (newDisplayName) {
+        promises.push(updateProfile(user, { displayName: newDisplayName }));
+      }
+
+      if (newPassword) {
+        promises.push(updatePassword(user, newPassword));
+      }
+
+      if (newEmail) {
+        promises.push(updateEmail(user, newEmail));
+      }
+
+      await Promise.all(promises);
+
+      const token = await user.getIdToken();
+      await loginWithToken(token);
+
+      return user;
     } catch (e) {
       throw new Error(extractFirebaseErrorCode(e));
     }

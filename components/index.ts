@@ -7,3 +7,4 @@ export * from "./promo-wrapper";
 export * from "./login-form";
 export * from "./register-form";
 export * from "./password-reset-form";
+export * from "./profile-form";

@@ -19,14 +19,14 @@ export const rules = {
   minLength: (min: number): Rule<string> => ({
     name: "minLength",
     validator: (value) => ({
-      isValid: value.length >= min,
+      isValid: !value || value.length >= min,
       errorText: `Мінімальна довжина – ${min} символів`,
     }),
   }),
-  confirmation: (): Rule<string> => ({
+  confirmation: (name: string): Rule<string> => ({
     name: "confirmation",
-    validator: (value, { password }) => ({
-      isValid: value === password,
+    validator: (value, fields: Record<string, string>) => ({
+      isValid: value === fields[name],
       errorText: "Паролі повинні збігатися",
     }),
   }),
