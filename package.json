@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@effector/next": "^0.7.0",
-    "@types/js-cookie": "^3.0.6",
     "clsx": "^2.1.0",
     "date-fns": "^2.0.0",
     "date-fns-tz": "^2.0.1",
@@ -39,6 +38,7 @@
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/typography": "^0.5.10",
+    "@types/js-cookie": "^3.0.6",
     "@types/luxon": "^3.4.2",
     "@types/node": "^20",
     "@types/papaparse": "^5.3.14",
