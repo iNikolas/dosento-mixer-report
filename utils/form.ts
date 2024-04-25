@@ -1,6 +1,6 @@
 import { FieldConfig } from "effector-forms";
 
-import { minimumPasswordLength } from "@/config";
+import { fullnameMinLength, minimumPasswordLength } from "@/config";
 
 import { rules } from "./validators";
 
@@ -17,7 +17,7 @@ export const fields = {
   }),
   fullName: (): FieldConfig<string> => ({
     init: "",
-    rules: [rules.required(), rules.minLength(2)],
+    rules: [rules.required(), rules.minLength(fullnameMinLength)],
     validateOn: ["blur"],
   }),
   confirmation: (reference = "password"): FieldConfig<string> => ({

@@ -7,24 +7,25 @@ import { FaUserTie } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { PiPasswordBold } from "react-icons/pi";
 
-import { registerModel } from "@/stores";
+import { profileModel } from "@/stores";
 
 import { InputWithIcon, AnimatedButton } from "../shared";
 
 export function ProfileForm() {
-  useGate(registerModel.Gate);
+  useGate(profileModel.Gate);
 
-  const { fields, submit, eachValid } = useForm(registerModel.form);
-  const loading = useUnit(registerModel.$loading);
+  const { fields, submit, eachValid } = useForm(profileModel.form);
+  const loading = useUnit(profileModel.$loading);
 
   return (
     <form
+      className="prose mx-auto flex flex-col gap-2"
       onSubmit={(e) => {
         e.preventDefault();
         submit();
       }}
     >
-      <h2>Реєстрація</h2>
+      <h2>Профіль користувача</h2>
       <InputWithIcon
         type="text"
         placeholder="Електронна пошта"
@@ -54,6 +55,15 @@ export function ProfileForm() {
       />
       <InputWithIcon
         type="password"
+        placeholder="Новий пароль"
+        Icon={PiPasswordBold}
+        value={fields.newPassword.value ?? ""}
+        onChange={(e) => fields.newPassword.onChange(e.target.value)}
+        onBlur={() => fields.newPassword.onBlur()}
+        error={fields.newPassword.errorText()}
+      />
+      <InputWithIcon
+        type="password"
         placeholder="Підтвердьте пароль"
         Icon={PiPasswordBold}
         value={fields.confirmation.value ?? ""}
@@ -61,8 +71,12 @@ export function ProfileForm() {
         onBlur={() => fields.confirmation.onBlur()}
         error={fields.confirmation.errorText()}
       />
-      <AnimatedButton disabled={loading || !eachValid} type="submit">
-        Зареєструватися
+      <AnimatedButton
+        className="mt-4"
+        disabled={loading || !eachValid}
+        type="submit"
+      >
+        Зберегти
       </AnimatedButton>
     </form>
   );

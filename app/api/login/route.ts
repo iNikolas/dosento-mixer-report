@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
-import { auth as firebaseAuth } from "firebase-admin";
 import { cookies, headers } from "next/headers";
-
-import { authCookieKey, cookieExpirationDays } from "@/config";
+import { auth as firebaseAuth } from "firebase-admin";
 import { getAdminApp } from "@/firebase/admin-app";
-import { isAuthorizedUser } from "@/utils";
+
+import { authCookieKey, cookieExpirationDays, userCookieKey } from "@/config";
+import {
+  deleteSessionCookies,
+  getUserFromSessionCookie,
+  isAuthorizedUser,
+} from "@/utils";
 
 export async function GET() {
   const auth = firebaseAuth(getAdminApp());
@@ -14,18 +18,22 @@ export async function GET() {
     return NextResponse.json({ isLogged: false }, { status: 401 });
   }
 
-  const decodedClaims = await auth.verifySessionCookie(session, true);
+  try {
+    const decodedClaims = await auth.verifySessionCookie(session, true);
 
-  if (!decodedClaims) {
+    if (!decodedClaims) {
+      throw new Error("Помилка перевірки сеансу користувача");
+    }
+
+    const isAuthorized = await isAuthorizedUser(decodedClaims.uid);
+
+    return NextResponse.json(
+      { isLogged: true },
+      { status: isAuthorized ? 200 : 401 },
+    );
+  } catch (e) {
     return NextResponse.json({ isLogged: false }, { status: 401 });
   }
-
-  const isAuthorized = await isAuthorizedUser(decodedClaims.uid);
-
-  return NextResponse.json(
-    { isLogged: true },
-    { status: isAuthorized ? 200 : 401 },
-  );
 }
 
 export async function POST() {
@@ -48,19 +56,23 @@ export async function POST() {
         httpOnly: true,
         secure: true,
       });
+
+      const user = await getUserFromSessionCookie(sessionCookie);
+
+      cookies().set({
+        name: userCookieKey,
+        value: JSON.stringify(user),
+        maxAge: expiresIn,
+        secure: true,
+      });
     }
 
     return NextResponse.json({}, { status: 200 });
   }
 }
 
-export function DELETE() {
-  const options = {
-    value: "",
-    maxAge: -1,
-  };
-
-  cookies().set({ name: authCookieKey, ...options });
+export async function DELETE() {
+  await deleteSessionCookies();
 
   return NextResponse.json({}, { status: 200 });
 }

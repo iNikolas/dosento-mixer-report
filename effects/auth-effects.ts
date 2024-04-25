@@ -76,36 +76,47 @@ export const passwordResetFx = createEffect(
 
 export const updateProfileFx = createEffect(
   async ({
-    displayName,
+    newDisplayName,
     password,
+    newPassword,
     email,
+    newEmail,
   }: {
-    displayName?: string;
-    password?: string;
-    email?: string;
+    email: string;
+    password: string;
+    newDisplayName?: string;
+    newPassword?: string;
+    newEmail?: string;
   }) => {
+    if (!newDisplayName && !newPassword && !newEmail) {
+      throw new Error("Ви не надали оновлених даних профілю");
+    }
+
     try {
-      const user = auth.currentUser;
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
 
       if (!user) {
-        throw new Error("Немає авторизованих користувачів");
+        throw new Error("Не вдалося перевірити облікові дані користувача");
       }
 
       const promises: Promise<unknown>[] = [];
 
-      if (displayName) {
-        promises.push(updateProfile(user, { displayName }));
+      if (newDisplayName) {
+        promises.push(updateProfile(user, { displayName: newDisplayName }));
       }
 
-      if (password) {
-        promises.push(updatePassword(user, password));
+      if (newPassword) {
+        promises.push(updatePassword(user, newPassword));
       }
 
-      if (email) {
-        promises.push(updateEmail(user, email));
+      if (newEmail) {
+        promises.push(updateEmail(user, newEmail));
       }
 
       await Promise.all(promises);
+
+      const token = await user.getIdToken();
+      await loginWithToken(token);
 
       return user;
     } catch (e) {

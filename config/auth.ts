@@ -4,10 +4,7 @@ export const cookieExpirationDays = 5;
 export const authCookieKey = "session";
 export const userCookieKey = "user";
 
-export const protectedRoutes = [links.report];
-export const authRoutes = [
-  links.login,
-  links.register,
-  links.passwordReset,
-  links.profile,
-];
+export const authCookies = [userCookieKey, authCookieKey];
+
+export const protectedRoutes = [links.report, links.profile];
+export const authRoutes = [links.login, links.register, links.passwordReset];

@@ -10,6 +10,8 @@ import {
 import { links } from "@/config";
 import { User } from "@/entities";
 
+import { Gate as loginodelGate } from "./login-model";
+
 export const Gate = createGate();
 
 export const logoutRequested = createEvent();
@@ -18,9 +20,16 @@ export const fetchUserDataRequested = createEvent();
 export const $currentUser = createStore<User | null>(null);
 
 sample({
-  clock: Gate.open,
+  clock: [Gate.open, loginodelGate.open],
   source: $currentUser,
   filter: (user) => !user,
+  target: fetchUserDataRequested,
+});
+
+sample({
+  clock: loginodelGate.open,
+  source: $currentUser,
+  filter: (user) => !!user,
   target: fetchUserDataRequested,
 });
 

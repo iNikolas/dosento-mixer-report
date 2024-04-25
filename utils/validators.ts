@@ -19,7 +19,7 @@ export const rules = {
   minLength: (min: number): Rule<string> => ({
     name: "minLength",
     validator: (value) => ({
-      isValid: value.length >= min,
+      isValid: !value || value.length >= min,
       errorText: `Мінімальна довжина – ${min} символів`,
     }),
   }),

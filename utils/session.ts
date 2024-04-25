@@ -1,9 +1,46 @@
 "use server";
 
-import { firestore } from "firebase-admin";
-
+import { cookies } from "next/headers";
+import { auth as firebaseAuth, firestore } from "firebase-admin";
 import { getAdminApp } from "@/firebase/admin-app";
-import { adminCollectionName, authorizedUsersDocumentName } from "@/config";
+
+import { User } from "@/entities";
+import {
+  adminCollectionName,
+  authCookies,
+  authorizedUsersDocumentName,
+} from "@/config";
+
+async function getSessionData(sessionCookie: string) {
+  const auth = firebaseAuth(getAdminApp());
+  const decodedClaims = await auth.verifySessionCookie(sessionCookie, true);
+
+  if (!decodedClaims) {
+    return null;
+  }
+
+  const user = await auth.getUser(decodedClaims.uid);
+
+  return user;
+}
+
+export async function getUserFromSessionCookie(
+  sessionCookie: string,
+): Promise<User | null> {
+  const data = await getSessionData(sessionCookie);
+
+  if (!data) {
+    return null;
+  }
+
+  const { uid, email, emailVerified, displayName } = data;
+
+  if (!email || !displayName) {
+    throw new Error("Дані користувача неповні");
+  }
+
+  return { uid, email, emailVerified, displayName };
+}
 
 export async function isAuthorizedUser(uid: string): Promise<boolean> {
   try {
@@ -23,4 +60,15 @@ export async function isAuthorizedUser(uid: string): Promise<boolean> {
   } catch (_) {
     throw new Error("Помилка перевірки авторизації");
   }
+}
+
+export async function deleteSessionCookies() {
+  const options = {
+    value: "",
+    maxAge: -1,
+  };
+
+  authCookies.forEach((name) => cookies().set({ name, ...options }));
+
+  return Promise.resolve();
 }
