@@ -45,7 +45,7 @@ export function Header() {
         <th rowSpan={2}>#</th>
       </tr>
 
-      <tr>
+      <tr className="top-10 z-0">
         <td className="text-center">Ціль</td>
         <td className="text-center">Факт</td>
         {showAnalitic && <td className="text-center">%</td>}
